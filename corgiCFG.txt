@@ -1,0 +1,79 @@
+Note:  this is the draft grammar, with notes and some thoughts, 
+       for the Project 2 version of Corgi
+------------------
+
+<program> -> <funcCall> | <funcCall> <funcDefs>
+
+<funcDefs> -> <funcDef> | <funcDef> <funcDefs>
+
+<funcDef> ->  def <var> ( ) end |
+              def <var> ( ) <statements> end
+              def <var> ( <params> ) end |
+              def <var> ( <params> ) <statements> end
+
+<params> -> <var> | <var> , <params>
+
+<statements> -> <statement> | 
+                <statement> <statements>
+
+<funcCall> -> <var> ( ) |
+              <var> ( <args> )
+
+<args> -> <expr> | <expr> , <args>
+
+<statement> ->  <string> |
+                <var> = <expr> |
+                <funcCall> |
+                if <expr> else end |
+                if <expr> else <statements> end |
+                if <expr> <statements> else end |
+                if <expr> <statements> else <statements> end |
+                return <expr>
+
+<expr> -> <term> | <term> + <expr> | <term> - <expr>
+<term> -> <factor> | <factor> * <term> | <factor> / <term>
+
+<factor> -> <num> | <var> |
+            ( <expr> ) |
+            - <factor> |
+            <funcCall>
+
+
+Notes:
+
+  slightly bizarre but cool:  in Corgi you can just type a string anywhere
+  as a statement and it gets sent to the console (still have to use 
+  print( <expr> ) to send a number)
+
+  no boolean type---use "non-zero is true, 0 is false"
+
+  there's only the if-else---always have to use it
+
+  no loop statements---use recursion!
+
+  the built-in functions fit the grammar just like user-defined functions---
+  will execute differently
+
+  change the Lexer to remove /* ..... */ type of comments---no tokens
+  produced
+  
+  change Lexer to allow \n inside a string---put \\ in the Java string?
+
+Here are the tentative official built-in functions:
+
+   lt(   ,   )   returns 1 if first arg is less than             the second
+                         0 otherwise
+   le(   ,   )     "                       less than or equal to   "
+   eq(   ,   )     "                       equal to
+   ne(   ,   )     "                       not equal
+
+   all the original Corgi bifs (input(), sqrt, cos, sin, atan,
+                                 pow( <expr>, <expr> )
+
+   some new ones:
+
+      print( <expr> )   just like in original Corgi, except say that if
+                        the decimal part is 0, then don't display the .0
+
+      round( <expr> )   returns the value rounded to nearest integer
+      trunc( <expr> )   returns the value with the decimal part set to 0
