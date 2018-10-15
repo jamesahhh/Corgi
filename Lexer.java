@@ -68,7 +68,7 @@ public class Lexer {
                  state = 6;
                }
                else if ( sym == '+' || sym == '-' || sym == '*' ||
-                         sym == '/' || sym == '(' || sym == ')' ||
+                         sym == '(' || sym == ')' ||
                          sym == ',' || sym == '='
                        ) {
                   data += (char) sym;
@@ -78,6 +78,9 @@ public class Lexer {
                else if ( sym == -1 ) {// end of file
                   state = 9;
                   done = true;
+               }
+               else if ( sym == "/"){
+                 state = 10;
                }
                else {
                  error("Error in lexical analysis phase with symbol "
@@ -143,6 +146,34 @@ public class Lexer {
                   state = 7;
                   done = true;
                }
+            }
+
+            else if (state == 10) {
+              if ( sym == "*"){
+                state = 11;
+                data = "";
+              }
+              else {
+                data += (char) sym;
+                state = 8;
+                done = true;
+              }
+            }
+            else if ( state == 11 ){
+              if( sym == "*"){
+                state = 12;
+              }
+            }
+            else if ( state = 12 ){
+              if( sym = "/"){
+                state = 13;
+              }
+              else { state = 11; }
+            }
+
+            else if ( state = 13 ){
+              putBackSymbol(sym);
+              state = 1;
             }
 
             // note: states 7, 8, and 9 are accepting states with
