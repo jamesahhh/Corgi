@@ -12,6 +12,7 @@ public class Node {
   public static int count = 0;  // maintain unique id for each node
 
   private int id;
+  private int rootId = 2;
 
   private String kind;  // non-terminal or terminal category for the node
   private String info;  // extra information about the node such as
@@ -137,7 +138,34 @@ System.out.println("has " + number + " children");
   // (for nodes that don't return a value)
    public void execute() {
 
-      if ( kind.equals("stmts") ) {
+      if (kind.equals("program")){
+          if ( first != null ) {
+              first.execute();
+              if ( second != null ) {
+                  second.execute();
+              }
+          }
+      }
+      else if (kind.equals("funcCall")){
+          bool found = false, eof = false;
+          Node node = Node[rootId];
+          while(!found && !eof){
+              if(info == node.first.info){
+                    found = true;
+                    node.first.evaluate();
+              }
+              else{
+                  if(node.second.details != "eof"){
+                      node = node.second;
+                  }
+                  else{
+                      eof = true;
+                      error("Function " + info + " was not found.");
+                  }
+              }
+          }
+      }
+      else if ( kind.equals("stmts") ) {
          if ( first != null ) {
             first.execute();
             if ( second != null ) {

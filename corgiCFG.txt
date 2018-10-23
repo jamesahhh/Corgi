@@ -1,4 +1,4 @@
-Note:  this is the draft grammar, with notes and some thoughts, 
+    Note:  this is the draft grammar, with notes and some thoughts,
        for the Project 2 version of Corgi
 ------------------
 

@@ -1,4 +1,4 @@
-/*
+   /*
     This class provides a recursive descent parser 
     for Corgi (a simple calculator language),
     creating a parse tree which can be interpreted
@@ -17,7 +17,118 @@ public class Parser {
    }
 
    public Node parseProgram() {
-      return parseStatements();
+      System.out.println("-----> parsing <program>:");
+      first = parseFuncCall();
+
+      // look ahead to see if there are more statement's
+      Token token = lex.getNextToken();
+
+      if ( token.isKind("eof") ) {
+         return new Node( "program", first, null, null );
+      }
+      else {
+         lex.putBackToken( token );
+         Node second = parseFuncDefs();
+         return new Node( "program", first, second, null );
+      }
+   }
+
+   private Node parseFuncCall() {
+      System.out.println("-----> parsing <funcCall>:");
+      Token token = lex.getNextToken();
+      funcName = token.getDetails();
+      token = lex.getNextToken();
+      errorCheck( token, "single", "(" );
+      token = lex.getNextToken();
+      if(token.getDetails() == ")"){
+         return new Node("funcCall", funcName, null, null, null);
+      }
+      else{
+         lex.putBackToken(token);
+         Node first = parseArgs();
+         return new Node("funcCall", funcName, first, null, null);
+      }
+   }
+
+   private Node parseFuncDefs() {
+      System.out.println("-----> parsing <funcDefs>:");
+
+      Node first = parseFuncDef();
+
+      // look ahead to see if there are more funcDefs
+      Token token = lex.getNextToken();
+
+      if ( token.isKind("eof") ) {
+         return new Node( "funcDefs", first, null, null );
+      }
+      else {
+         lex.putBackToken(token);
+         Node second = parseFuncDef();
+         return new Node("funcDefs", first, second, null);
+      }
+   }
+
+   private Node parseFuncDef() {
+      System.out.println("-----> parsing <funcDef>:");
+      Token token = lex.getNextToken();
+      errorCheck( token, "var", "def" );
+      token = lex.getNextToken();
+      funcName = token.getDetails();
+      token = lex.getNextToken();
+      errorCheck( token, "single", "(" );
+      token = lex.getNextToken();
+      if(token.getDetails() == ")"){//No <params>
+         token = lex.getNextToken();
+         if(token.getDetails() == "end"){//No <stmts>
+               return new Node("funcDef", funcName, null, null, null);
+         }
+         else{//Has <stmts>
+            lex.putBackToken(token);
+            Node second = parseStatements();
+            return new Node("funcDef", funcName, null, second, null);
+         }
+      }
+      else{//Has <params>
+         lex.putBackToken(token);
+         Node first = parseParams();
+         token = lex.getNextToken();
+         if(token.getDetails() == "end"){//No <stmts>
+            return new Node("funcDef", funcName, first, null, null);
+         }
+         else{//Has <stmts>
+            lex.putBackToken(token);
+            Node second = parseStatements();
+            return new Node("funcDef", funcName, first, second, null);
+         }
+      }
+   }
+
+   private Node parseArgs(){
+      System.out.println("-----> parsing <args>:");
+      Node first = parseExpr();
+      Token token = lex.getNextToken();
+      if(token.getDetails() == ")"){
+         return new Node("args", first, null, null);
+      }
+      else {
+         lex.putBackToken(token);
+         Node second = parseArgs();
+         return new Node("args", first, second, null);
+      }
+   }
+
+   private Node parseParams(){
+      System.out.println("-----> parsing <params>:");
+      Node first = parseFactor();
+      Token token = lex.getNextToken();
+      if(token.getDetails() == ")"){
+         return new Node("params", first, null, null);
+      }
+      else {
+         lex.putBackToken(token);
+         Node second = parseParams();
+         return new Node("params", first, second, null);
+      }
    }
 
    private Node parseStatements() {
@@ -28,7 +139,7 @@ public class Parser {
       // look ahead to see if there are more statement's
       Token token = lex.getNextToken();
  
-      if ( token.isKind("eof") ) {
+      if ( token.isKind("eof") || token.getDetails() == "else" || token.getDetails() == "end") {
          return new Node( "stmts", first, null, null );
       }
       else {
