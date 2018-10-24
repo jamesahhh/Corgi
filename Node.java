@@ -11,8 +11,11 @@ public class Node {
 
   public static int count = 0;  // maintain unique id for each node
 
+  private int rv;
   private int id;
   private int rootId = 2;
+
+  private boolean return;
 
   private String kind;  // non-terminal or terminal category for the node
   private String info;  // extra information about the node such as
