@@ -138,14 +138,12 @@ System.out.println("has " + number + " children");
   // (for nodes that don't return a value)
    public void execute() {
 
-      if (kind.equals("program")){
-          if ( first != null ) {
+      if (kind.equals("program")) {
+          if (first != null) {
               first.execute();
-              if ( second != null ) {
-                  second.execute();
-              }
           }
       }
+
       else if (kind.equals("funcCall")){
           bool found = false, eof = false;
           Node node = Node[rootId];
@@ -165,6 +163,7 @@ System.out.println("has " + number + " children");
               }
           }
       }
+
       else if ( kind.equals("stmts") ) {
          if ( first != null ) {
             first.execute();
