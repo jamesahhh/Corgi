@@ -265,6 +265,10 @@ System.out.println("has " + number + " children");
           return (int) Math.round(first.evaluate());
       }
 
+      else if(kind.equals("trunc")){
+          return (double) Math.floor(first.evaluate());
+      }
+
        else {
           error("Unknown node kind [" + kind + "]");
           return 0;
