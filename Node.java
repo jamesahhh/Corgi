@@ -176,7 +176,31 @@ System.out.println("has " + number + " children");
          }
       }
 
-      else if ( kind.equals("prtstr") ) {
+      else if ( kind.equals("stmt") ) {
+      	rv = first.evaluate();
+      	if ( info.equals("ifelse1") ){
+      		// do nothing but evaluate expression
+      	} else if ( info.equals("ifelse2") ) {
+      		if ( rv = 0 ) {
+      			second.execute(); // runs else statements
+      		}
+      	} else if ( info.equals("ifelse_2") ) {
+      		if ( rv > 0) {
+          		second.execute();	// if true run statements no else
+      		} 
+      	} else if ( info.equals("ifelse3") ) {
+      		if ( rv > 0 ) {
+          		second.execute(); // if expr > 1
+      		}
+      		else {
+      			third.execute(); // if exp <= 0
+      		}
+      	}else if ( info.equals("return") ){
+      		// TODO how do we handle returning an expression
+      	}
+      }
+
+      else if ( kind.equals("print") ) {
          System.out.print( info );
       }
       
