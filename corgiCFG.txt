@@ -1,4 +1,4 @@
-    Note:  this is the draft grammar, with notes and some thoughts,
+Note:  this is the draft grammar, with notes and some thoughts, 
        for the Project 2 version of Corgi
 ------------------
 
@@ -57,7 +57,20 @@ Notes:
   change the Lexer to remove /* ..... */ type of comments---no tokens
   produced
   
-  change Lexer to allow \n inside a string---put \\ in the Java string?
+NO!  change Lexer to allow \n inside a string---put \\ in the Java string?
+ This is mildly irritating, worth adding a bif:   nl()
+
+While doing Project 2 I noticed that it's easier if we require all
+functions to return (saves handling difference between hitting "end"
+at the end of function that didn't do a return, and hitting "end"
+elsewhere).  
+So, if you want to, it's okay to assume that all functions return on all
+execution paths (just do like  [return 0] if the function doesn't really
+feel like returning a number.
+
+Also, it's okay to require the initial funcCall to not be to a built-in
+function (in my implementation, seems to be a problem (could probably be
+easily fixed, but is a silly feature, anyway).
 
 Here are the tentative official built-in functions:
 
@@ -67,6 +80,11 @@ Here are the tentative official built-in functions:
    eq(   ,   )     "                       equal to
    ne(   ,   )     "                       not equal
 
+   or(  ,  )    returns 1 if either arg is non-zero, 0 otherwise
+   and(  ,  )   returns 1 if both args are non-zero, 0 otherwise
+
+   not(  )   returns 1 if arg is zero, 0 otherwise
+
    all the original Corgi bifs (input(), sqrt, cos, sin, atan,
                                  pow( <expr>, <expr> )
 
@@ -74,6 +92,11 @@ Here are the tentative official built-in functions:
 
       print( <expr> )   just like in original Corgi, except say that if
                         the decimal part is 0, then don't display the .0
+                        (this is the only bif that is called as a statement)
+
+      nl()    prints a newline
+                (NOTE:  unlike all other bifs, funcCall to print and nl
+                        are statements, don't return a value)
 
       round( <expr> )   returns the value rounded to nearest integer
       trunc( <expr> )   returns the value with the decimal part set to 0
