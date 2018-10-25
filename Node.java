@@ -261,6 +261,10 @@ System.out.println("has " + number + " children");
           return -value;
        }
 
+       else if(kind.equals("round")){
+          return (int) Math.round(first.evaluate());
+      }
+
        else {
           error("Unknown node kind [" + kind + "]");
           return 0;
