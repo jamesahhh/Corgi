@@ -179,7 +179,12 @@ System.out.println("has " + number + " children");
       
       else if ( kind.equals("prtexp") ) {
          double value = first.evaluate();
-         System.out.print( value );
+         if(value % 1 == 0){
+             System.out.print((int)value);
+         }
+         else{
+             System.out.print( value );
+         }
       }
       
       else if ( kind.equals("nl") ) {
@@ -260,6 +265,14 @@ System.out.println("has " + number + " children");
           double value = first.evaluate();
           return -value;
        }
+
+       else if(kind.equals("round")){
+          return (int) Math.round(first.evaluate());
+      }
+
+      else if(kind.equals("trunc")){
+          return (double) Math.floor(first.evaluate());
+      }
 
        else {
           error("Unknown node kind [" + kind + "]");
