@@ -190,7 +190,8 @@ public class Lexer {
                return new Token( "bif0", data );
             }
             else if ( data.equals("sqrt") || data.equals("cos") || 
-                      data.equals("sin") || data.equals("atan") 
+                      data.equals("sin")  || data.equals("atan")||
+                      data.equals("round")|| data.equals("trunc")
                     ) {
                return new Token( "bif1", data );
             }
