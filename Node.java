@@ -13,9 +13,9 @@ public class Node {
 
   private int rv; // to store return value of evaluate for if-else
   private int id;
-  private int rootId = 2;
+  private int rootId = 0;
 
-  private boolean return;
+  private boolean returnBool;
 
   private String kind;  // non-terminal or terminal category for the node
   private String info;  // extra information about the node such as
@@ -142,21 +142,26 @@ System.out.println("has " + number + " children");
    public void execute() {
 
       if (kind.equals("program")) {
-          if (first != null) {
+          if (first != null)
               first.execute();
-          }
+          else
+              error("Program does have an initial function call");
       }
 
       else if (kind.equals("funcCall")){
           boolean found = false, eof = false;
           Node node = Node[rootId];
+          if(node.second != null)
+              node = node.second;
+          else
+              error("Program does not have any function deffinitions");
           while(!found && !eof){
               if(info == node.first.info){
                     found = true;
                     node.first.evaluate();
               }
               else{
-                  if(node.second.details != "eof"){
+                  if(node.second != null){
                       node = node.second;
                   }
                   else{
@@ -232,7 +237,11 @@ System.out.println("has " + number + " children");
    // compute and return value produced by this node
    public double evaluate() {
 
-      if ( kind.equals("num") ) {
+      if ( kind.equals("funcDef") ) {
+
+      }
+
+      else if ( kind.equals("num") ) {
          return Double.parseDouble( info );
       }
 
