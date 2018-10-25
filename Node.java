@@ -11,8 +11,11 @@ public class Node {
 
   public static int count = 0;  // maintain unique id for each node
 
+  private int rv; // to store return value of evaluate for if-else
   private int id;
   private int rootId = 2;
+
+  private boolean return;
 
   private String kind;  // non-terminal or terminal category for the node
   private String info;  // extra information about the node such as
@@ -145,7 +148,7 @@ System.out.println("has " + number + " children");
       }
 
       else if (kind.equals("funcCall")){
-          bool found = false, eof = false;
+          boolean found = false, eof = false;
           Node node = Node[rootId];
           while(!found && !eof){
               if(info == node.first.info){
@@ -173,7 +176,31 @@ System.out.println("has " + number + " children");
          }
       }
 
-      else if ( kind.equals("prtstr") ) {
+      else if ( kind.equals("stmt") ) {
+      	rv = first.evaluate();
+      	if ( info.equals("ifelse1") ){
+      		// do nothing but evaluate expression
+      	} else if ( info.equals("ifelse2") ) {
+      		if ( rv = 0 ) {
+      			second.execute(); // runs else statements
+      		}
+      	} else if ( info.equals("ifelse_2") ) {
+      		if ( rv > 0) {
+          		second.execute();	// if true run statements no else
+      		} 
+      	} else if ( info.equals("ifelse3") ) {
+      		if ( rv > 0 ) {
+          		second.execute(); // if expr > 1
+      		}
+      		else {
+      			third.execute(); // if exp <= 0
+      		}
+      	}else if ( info.equals("return") ){
+      		// TODO how do we handle returning an expression
+      	}
+      }
+
+      else if ( kind.equals("print") ) {
          System.out.print( info );
       }
       
