@@ -179,7 +179,12 @@ System.out.println("has " + number + " children");
       
       else if ( kind.equals("prtexp") ) {
          double value = first.evaluate();
-         System.out.print( value );
+         if(value % 1 == 0){
+             System.out.print((int)value);
+         }
+         else{
+             System.out.print( value );
+         }
       }
       
       else if ( kind.equals("nl") ) {
