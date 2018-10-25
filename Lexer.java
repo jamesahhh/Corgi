@@ -195,7 +195,11 @@ public class Lexer {
                     ) {
                return new Token( "bif1", data );
             }
-            else if ( data.equals("pow") ) {
+            else if ( data.equals("pow") || data.equals("lt") ||
+                      data.equals("le")  || data.equals("eq") ||
+                      data.equals("ne")  || data.equals("or") ||
+                      data.equals("and") || data.equals("not")||
+                    ) {
                return new Token( "bif2", data );
             }
             else if ( data.equals("print") ) {
