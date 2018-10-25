@@ -11,7 +11,7 @@ public class Node {
 
   public static int count = 0;  // maintain unique id for each node
 
-  private int rv;
+  private int rv; // to store return value of evaluate for if-else
   private int id;
   private int rootId = 2;
 
@@ -148,7 +148,7 @@ System.out.println("has " + number + " children");
       }
 
       else if (kind.equals("funcCall")){
-          bool found = false, eof = false;
+          boolean found = false, eof = false;
           Node node = Node[rootId];
           while(!found && !eof){
               if(info == node.first.info){
