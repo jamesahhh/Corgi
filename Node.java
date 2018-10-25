@@ -14,6 +14,7 @@ public class Node {
   private int rv; // to store return value of evaluate for if-else
   private int id;
   private int rootId = 0;
+  private int a = 0,p = 0;
 
   private boolean returnBool;
 
@@ -148,29 +149,25 @@ System.out.println("has " + number + " children");
               error("Program does have an initial function call");
       }
 
-      else if (kind.equals("funcCall")){
-          boolean found = false, eof = false;
-          Node node = Node[rootId];
-          if(node.second != null)
-              node = node.second;
-          else
-              error("Program does not have any function deffinitions");
-          while(!found && !eof){
-              if(info == node.first.info){
-                    found = true;
-                    node.first.evaluate();
-              }
-              else{
-                  if(node.second != null){
-                      node = node.second;
-                  }
-                  else{
-                      eof = true;
-                      error("Function " + info + " was not found.");
-                  }
-              }
-          }
+      else if ( kind.equals("funcDef") ) {
+        first.execute();
+        second.execute();
+    }
+    
+    else if (kind.equals("params")){
+      table.name[p] = info;
+      p++;
+      if(first != null) {
+        first.execute();
       }
+    }
+    else if (kind.equals("args")){
+      table.value[a] = (Double) info;
+      a++;
+      if(first != null){
+        first.execute();
+      }
+    }
 
       else if ( kind.equals("stmts") ) {
          if ( first != null ) {
@@ -237,9 +234,34 @@ System.out.println("has " + number + " children");
    // compute and return value produced by this node
    public double evaluate() {
 
-      if ( kind.equals("funcDef") ) {
-
-      }
+      if (kind.equals("funcCall")){
+        boolean found = false, eof = false;
+        Node node = Node[rootId];
+        if(node.second != null)
+            node = node.second;
+        else
+            error("Program does not have any function deffinitions");
+        while(!found && !eof){
+            if(info == node.first.info){
+                  found = true;
+                  node.first.evaluate();
+            }
+            else{
+                if(node.second != null){
+                    node = node.second;
+                }
+                else{
+                    eof = true;
+                    error("Function " + info + " was not found.");
+                }
+            }
+        }
+        table = new MemTable();
+        a = 0;
+        p = 0;
+        returnBool = false;
+        return rv;
+    }
 
       else if ( kind.equals("num") ) {
          return Double.parseDouble( info );
