@@ -184,6 +184,123 @@ public class Parser {
                return new Node("stmt", "ifelse2", first, second, null);
             }
          }
+
+         // less than
+         else if ( token.isKind("var") && token.getDetails() == "lt" ) {
+
+            token = lex.getNextToken();
+            errorCheck(token.single, "(");
+            Node first = parseFactor();
+
+            token = lex.getNextToken();
+            errorCheck(token.single, ",");
+            Node second = parseFactor();
+
+            token = lex.getNextToken();
+            errorCheck(token.single, ")");
+
+            return new Node("lt", first, second, null);
+         }
+
+         // less than or equal to
+         else if ( token.isKind("var") && token.getDetails() == "le" ) {
+
+            token = lex.getNextToken();
+            errorCheck(token.single, "(");
+            Node first = parseFactor();
+
+            token = lex.getNextToken();
+            errorCheck(token.single, ",");
+            Node second = parseFactor();
+
+            token = lex.getNextToken();
+            errorCheck(token.single, ")");
+
+            return new Node("le", first, second, null);
+         }
+
+         // equal to
+         else if ( token.isKind("var") && token.getDetails() == "eq" ) {
+
+            token = lex.getNextToken();
+            errorCheck(token.single, "(");
+            Node first = parseFactor();
+
+            token = lex.getNextToken();
+            errorCheck(token.single, ",");
+            Node second = parseFactor();
+
+            token = lex.getNextToken();
+            errorCheck(token.single, ")");
+
+            return new Node("eq", first, second, null);
+         }
+
+         // not equal
+         else if ( token.isKind("var") && token.getDetails() == "ne" ) {
+
+            token = lex.getNextToken();
+            errorCheck(token.single, "(");
+            Node first = parseFactor();
+
+            token = lex.getNextToken();
+            errorCheck(token.single, ",");
+            Node second = parseFactor();
+
+            token = lex.getNextToken();
+            errorCheck(token.single, ")");
+
+            return new Node("ne", first, second, null);
+         }
+
+         // or
+         else if ( token.isKind("var") && token.getDetails() == "or" ) {
+
+            token = lex.getNextToken();
+            errorCheck(token.single, "(");
+            Node first = parseFactor();
+
+            token = lex.getNextToken();
+            errorCheck(token.single, ",");
+            Node second = parseFactor();
+
+            token = lex.getNextToken();
+            errorCheck(token.single, ")");
+
+            return new Node("or", first, second, null);
+         }
+
+         // and
+         else if ( token.isKind("var") && token.getDetails() == "and" ) {
+
+            token = lex.getNextToken();
+            errorCheck(token.single, "(");
+            Node first = parseFactor();
+
+            token = lex.getNextToken();
+            errorCheck(token.single, ",");
+            Node second = parseFactor();
+
+            token = lex.getNextToken();
+            errorCheck(token.single, ")");
+
+            return new Node("and", first, second, null);
+         }
+
+         // not
+         else if ( token.isKind("var") && token.getDetails() == "not" ) {
+
+            token = lex.getNextToken();
+            errorCheck(token.single, "(");
+            Node first = parseFactor();
+
+            token = lex.getNextToken();
+            errorCheck(token.single, ")");
+
+            return new Node("not", first, null, null);
+         }
+
+
          // --> if <expr> <statements>
          else {
             Node second = parseStatements();
