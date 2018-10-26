@@ -26,7 +26,7 @@ public class Node {
   private Node first, second, third;
 
   // memory tables shared by all nodes but private to a function
-  private static ArrayList<MemTable> tables;
+  private static Stack<MemTable> tables;
 
   private static Scanner keys = new Scanner(System.in);
 
@@ -165,7 +165,7 @@ public class Node {
   public void execute() {
 
     if (kind.equals("program")) {
-      tables = new ArrayList<MemTable>();
+      tables = new Stack<MemTable>();
       if (second != null)
         funcRoot = second;
       else
@@ -177,20 +177,20 @@ public class Node {
     }
 
     else if (kind.equals("funcDef")) {
+        paramCount = 0;
         if(first != null) {
-            paramCount = 0;
             first.execute();
-            if (paramCount != argCount)
-                error("Function " + info + " has " + paramCount + " parameters and was passed " + argCount + "arguments");
         }
+        if (paramCount != argCount)
+            error("Function " + info + " has " + paramCount + " parameters and was passed " + argCount + "arguments");
         if(second != null)
             second.execute();
     }
 
     else if (kind.equals("params")) {
-        MemTable tempTable = tables.get(tables.size()-1);
-        tempTable.changeName(paramCount, info);
-        tables.set(tables.size()-1, tempTable);
+        MemTable table = tables.pop();
+        table.changeName(paramCount, info);
+        tables.push(table);
         paramCount++;
         if (first != null) {
             first.execute();
@@ -198,9 +198,9 @@ public class Node {
     }
 
     else if (kind.equals("args")) {
-        MemTable tempTable = tables.get(tables.size()-1);
-        tempTable.store((Integer.toString(argCount)), first.evaluate());
-        tables.set(tables.size()-1, tempTable);
+        MemTable table = tables.pop();
+        table.store((Integer.toString(argCount)), first.evaluate());
+        tables.push(table);
         argCount++;
         if (second != null) {
           second.execute();
@@ -253,9 +253,9 @@ public class Node {
 
     else if (kind.equals("sto")) {
       double value = first.evaluate();
-      MemTable table = tables.get(tables.size()-1);
+      MemTable table = tables.pop();
       table.store(info, value);
-      tables.set(tables.size()-1, table);
+      tables.push(table);
     }
 
     else {
@@ -269,13 +269,15 @@ public class Node {
 
     if (kind.equals("funcCall")) {
       boolean found = false, eof = false;
+      tables.push(new MemTable());
       argCount = 0;
       if(first != null){
-          tables.add(new MemTable());
           first.execute();
       }
       Node node = funcRoot;
       while (!found && !eof) {
+        System.out.println("Looking for function " + info);
+        System.out.println("Looking at function " + node.first.info);
         if (info == node.first.info) {
           found = true;
           node.first.execute();
@@ -290,7 +292,7 @@ public class Node {
           }
         }
       }
-      tables.remove(tables.size()-1);
+      tables.pop();
       returnBool = false;
       return rv;
     }

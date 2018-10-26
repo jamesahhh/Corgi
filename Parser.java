@@ -46,6 +46,8 @@ public class Parser {
       else{
          lex.putBackToken(token);
          Node first = parseArgs();
+         token = lex.getNextToken();
+         errorCheck( token, "single", ")" );
          return new Node("funcCall", funcName, first, null, null);
       }
    }
@@ -77,7 +79,7 @@ public class Parser {
       token = lex.getNextToken();
       errorCheck( token, "single", "(" );
       token = lex.getNextToken();
-      if(token.isKind("single")){//No <params>
+      if(token.matches("single",")")){//No <params>
          token = lex.getNextToken();
          if(token.getDetails() == "end"){//No <stmts>
             return new Node("funcDef", funcName, null, null, null);
@@ -108,6 +110,7 @@ public class Parser {
       Node first = parseExpr();
       Token token = lex.getNextToken();
       if(token.getDetails() == ")"){
+         lex.putBackToken(token);
          return new Node("args", first, null, null);
       }
       else {
@@ -141,7 +144,7 @@ public class Parser {
       // look ahead to see if there are more statement's
       Token token = lex.getNextToken();
  
-      if ( token.isKind("eof") || token.getDetails() == "else" || token.getDetails() == "end") {
+      if ( token.isKind("eof") || token.matches("var","else") || token.matches("var","end")) {
          return new Node( "stmts", first, null, null );
       }
       else {
@@ -159,7 +162,7 @@ public class Parser {
          return new Node( "print", token.getDetails(), null, null, null );
       }
 
-      else if ( token.isKind("bif0")) {
+      else if ( token.matches("bif0","nl") ) {
          token = lex.getNextToken();
          errorCheck( token, "single", "(" );
          token = lex.getNextToken();
@@ -167,7 +170,7 @@ public class Parser {
          return new Node( "nl", null, null, null );
       }
 
-      else if ( token.isKind("var") && token.getDetails() == "return" ){
+      else if ( token.matches("var","return") ){
          Node first = parseExpr();
          return new Node("return", first, null, null);
       }
