@@ -40,7 +40,7 @@ public class Parser {
       token = lex.getNextToken();
       errorCheck( token, "single", "(" );
       token = lex.getNextToken();
-      if(token.getDetails() == ")"){
+      if(token.isKind("single")){
          return new Node("funcCall", funcName, null, null, null);
       }
       else{
@@ -77,7 +77,7 @@ public class Parser {
       token = lex.getNextToken();
       errorCheck( token, "single", "(" );
       token = lex.getNextToken();
-      if(token.getDetails() == ")"){//No <params>
+      if(token.isKind("single")){//No <params>
          token = lex.getNextToken();
          if(token.getDetails() == "end"){//No <stmts>
             return new Node("funcDef", funcName, null, null, null);
@@ -157,6 +157,14 @@ public class Parser {
       Token token = lex.getNextToken();
       if ( token.isKind("string") ){
          return new Node( "print", token.getDetails(), null, null, null );
+      }
+
+      else if ( token.isKind("bif0")) {
+         token = lex.getNextToken();
+         errorCheck( token, "single", "(" );
+         token = lex.getNextToken();
+         errorCheck( token, "single", ")" );
+         return new Node( "nl", null, null, null );
       }
 
       else if ( token.isKind("var") && token.getDetails() == "return" ){

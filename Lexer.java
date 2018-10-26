@@ -75,12 +75,15 @@ public class Lexer {
                   state = 8;
                   done = true;
                }
+               else if ( sym == '/'){
+                   state = 10;
+               }
+               else if ( sym == '"'){
+                   state = 14;
+               }
                else if ( sym == -1 ) {// end of file
                   state = 9;
                   done = true;
-               }
-               else if ( sym == '/'){
-                 state = 10;
                }
                else {
                  error("Error in lexical analysis phase with symbol "
@@ -174,6 +177,15 @@ public class Lexer {
             else if ( state == 13 ){
               putBackSymbol(sym);
               state = 1;
+            }
+            else if ( state == 14 ){
+                if( sym == '"'){
+                    state = 7;
+                    done = true;
+                }
+                else{
+                    data += sym;
+                }
             }
 
             // note: states 7, 8, and 9 are accepting states with
