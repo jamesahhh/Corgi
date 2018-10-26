@@ -186,15 +186,20 @@ public class Lexer {
  
          if ( state == 2 ) {
             // see if data matches any special words
-            if ( data.equals("input") ) {
+            if ( data.equals("input") || data.equals("nl") ) {
                return new Token( "bif0", data );
             }
             else if ( data.equals("sqrt") || data.equals("cos") || 
-                      data.equals("sin") || data.equals("atan") 
+                      data.equals("sin")  || data.equals("atan")||
+                      data.equals("round")|| data.equals("trunc")
                     ) {
                return new Token( "bif1", data );
             }
-            else if ( data.equals("pow") ) {
+            else if ( data.equals("pow") || data.equals("lt") ||
+                      data.equals("le")  || data.equals("eq") ||
+                      data.equals("ne")  || data.equals("or") ||
+                      data.equals("and") || data.equals("not")||
+                    ) {
                return new Token( "bif2", data );
             }
             else if ( data.equals("print") ) {
