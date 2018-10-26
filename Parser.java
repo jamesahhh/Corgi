@@ -377,6 +377,8 @@ public class Parser {
    }// <term>
 
    private Node parseFactor() {
+      String bif1[] = new String[] {"sqrt", "cos", "sin", "atan", "round", "trunc"};
+      String bif2[] = new String[] {"pow", "lt", "le", "eq", "ne", "or", "and", "not"};
       System.out.println("-----> parsing <factor>");
 
       Token token = lex.getNextToken();
@@ -402,7 +404,7 @@ public class Parser {
          
          return new Node( bifName, null, null, null );
       }
-      else if ( token.isKind("bif1") ) {
+      else if (Arrays.asList(bif1).contains(token.kind)) {
          String bifName = token.getDetails();
          token = lex.getNextToken();
          errorCheck( token, "single", "(" );
@@ -412,7 +414,7 @@ public class Parser {
          
          return new Node( bifName, first, null, null );
       }
-      else if ( token.isKind("pow") ) {
+      else if (Arrays.asList(bif2).contains(token.kind)) {
          String bifName = token.getDetails();
          token = lex.getNextToken();
          errorCheck( token, "single", "(" );
