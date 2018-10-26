@@ -187,7 +187,7 @@ public class Lexer {
          if ( state == 2 ) {
             // see if data matches any special words
             if ( data.equals("input") ) {
-               return new Token( "bif0", data );
+               return new Token( "input", data );
             }
             else if ( data.equals("sqrt") || data.equals("cos") || 
                       data.equals("sin") || data.equals("atan") 
@@ -195,7 +195,7 @@ public class Lexer {
                return new Token( "bif1", data );
             }
             else if ( data.equals("pow") ) {
-               return new Token( "bif2", data );
+               return new Token( "pow", data );
             }
             else if ( data.equals("print") ) {
                return new Token( "print", "" );

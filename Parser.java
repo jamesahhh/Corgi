@@ -393,7 +393,7 @@ public class Parser {
          errorCheck( token, "single", ")" );
          return first;
       }
-      else if ( token.isKind("bif0") ) {
+      else if ( token.isKind("input") ) {
          String bifName = token.getDetails();
          token = lex.getNextToken();
          errorCheck( token, "single", "(" );
@@ -412,7 +412,7 @@ public class Parser {
          
          return new Node( bifName, first, null, null );
       }
-      else if ( token.isKind("bif2") ) {
+      else if ( token.isKind("pow") ) {
          String bifName = token.getDetails();
          token = lex.getNextToken();
          errorCheck( token, "single", "(" );
