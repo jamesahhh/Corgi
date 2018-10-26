@@ -1,0 +1,21 @@
+main()
+
+def fact( n )
+
+   if le(n, 1) 
+      return 1
+   else
+      temp = fact( n-1 )
+      return n * temp
+   end
+
+end
+
+def main()
+
+  "enter n: "
+  n = input()
+  print(n)   "! = "   print(fact(n))    nl()
+
+return 0
+end

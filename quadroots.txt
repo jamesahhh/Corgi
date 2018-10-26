@@ -1,0 +1,25 @@
+main()
+
+def main()
+
+   "enter a:"
+
+   a = input()
+
+   "enter b:"
+   b = input()
+
+   "enter c:"
+   c = input()
+
+   disc = pow(b,2) - 4*a*c
+
+   x1 = (-b - sqrt(disc) ) / (2*a)
+   x2 = (-b + sqrt(disc) ) / (2*a)
+
+   "x1: "    print(x1) nl()
+   "x2: "    print(x2 ) nl()
+
+
+   return 0
+end
