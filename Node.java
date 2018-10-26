@@ -263,6 +263,77 @@ System.out.println("has " + number + " children");
         return rv;
     }
 
+    else if (kind.equals("lt")){
+      double a = (Double) first.info;
+      double b = (Double) second.info;
+
+      if(a<b){
+        return 1;
+      }else{
+        return 0;
+      }
+    }
+    else if (kind.equals("le")){
+      double a = (Double) first.info;
+      double b = (Double) second.info;
+
+      if(a<b || a == b){
+        return 1;
+      }else{
+        return 0;
+      }
+    }
+    else if (kind.equals("eq")){
+      double a = (Double) first.info;
+      double b = (Double) second.info;
+
+      if(a==b){
+        return 1;
+      } else{
+        return 0;
+      }
+    }
+    else if (kind.equals("ne")) {
+      double a = (Double) first.info;
+      double b = (Double) second.info;
+
+      if(a != b){
+        return 1;
+      } else{
+        return 0;
+      }
+    }
+    else if (kind.equals("or")) {
+      double a = (Double) first.info;
+      double b = (Double) second.info;
+
+      if(a != 0 || b != 0){
+        return 1;
+      } else{
+        return 0;
+      }
+    }
+    else if (kind.equals("and")) {
+      double a = (Double) first.info;
+      double b = (Double) second.info;
+
+      if(a != 0 && b != 0){
+        return 1;
+      } else{
+        return 0;
+      }
+    }
+    else if (kind.equals("not")) {
+      double a = (Double) first.info;
+
+      if(a == 0){
+        return 1;
+      } else{
+        return 0;
+      }
+    }
+
+
       else if ( kind.equals("num") ) {
          return Double.parseDouble( info );
       }
