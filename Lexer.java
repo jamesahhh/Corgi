@@ -185,13 +185,20 @@ public class Lexer {
          Token token;
  
          if ( state == 2 ) {
-            // see if data matches any special words
+           // Previously handling differentiation between 
+           // bifs0-2 here, now being handled in the Parser.
              if(data == null){
                  return new Token("var", "");
              }
              else{
                  return new Token(data, data);
              }
+            else if ( data.equals("print") ) {
+               return new Token( "print", "" );
+            }
+            else if ( data.equals("newline") ) {
+               return new Token( "newline", "" );
+            }
          }
          else if ( state == 3 || state == 4 ) {
             return new Token( "num", data );

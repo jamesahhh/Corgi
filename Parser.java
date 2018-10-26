@@ -323,6 +323,7 @@ public class Parser {
          } 
       }
       // --> return <exp>
+      // TODO decide if this is the right way to handle returning
       else if ( token.isKind("var") && token.getDetails() == "return" ){
          Node first = parseExp();
          return new Node("stmt", "return", first);
