@@ -167,27 +167,31 @@ public class Node {
 
     if (kind.equals("program")) {
       if (first != null)
-        first.execute();
+        first.evaluate();
       else
         error("Program does have an initial function call");
     }
 
     else if (kind.equals("funcDef")) {
-      first.execute();
-      second.execute();
+        if(first != null)
+          first.execute();
+        if(second != null)
+          second.execute();
     }
 
     else if (kind.equals("params")) {
-      table.name[p] = info;
-      p++;
-      if (first != null) {
-        first.execute();
-      }
-    } else if (kind.equals("args")) {
-      table.value[a] = (Double) info;
+        table.name[p] = info;
+        p++;
+        if (first != null) {
+            first.execute();
+        }
+    }
+
+    else if (kind.equals("args")) {
+      table.value[a] = first.evaluate();
       a++;
-      if (first != null) {
-        first.execute();
+      if (second != null) {
+        second.execute();
       }
     }
 
@@ -268,7 +272,8 @@ public class Node {
         } else {
           if (node.second != null) {
             node = node.second;
-          } else {
+          }
+          else {
             eof = true;
             error("Function " + info + " was not found.");
           }

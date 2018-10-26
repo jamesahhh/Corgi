@@ -63,7 +63,7 @@ public class Parser {
       }
       else {
          lex.putBackToken(token);
-         Node second = parseFuncDef();
+         Node second = parseFuncDefs();
          return new Node("funcDefs", first, second, null);
       }
    }
@@ -80,7 +80,7 @@ public class Parser {
       if(token.getDetails() == ")"){//No <params>
          token = lex.getNextToken();
          if(token.getDetails() == "end"){//No <stmts>
-               return new Node("funcDef", funcName, null, null, null);
+            return new Node("funcDef", funcName, null, null, null);
          }
          else{//Has <stmts>
             lex.putBackToken(token);
