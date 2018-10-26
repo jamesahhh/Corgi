@@ -191,14 +191,15 @@ public class Lexer {
             }
             else if ( data.equals("sqrt") || data.equals("cos") || 
                       data.equals("sin")  || data.equals("atan")||
-                      data.equals("round")|| data.equals("trunc")
+                      data.equals("round")|| data.equals("trunc") ||
+                      data.equals("not")
                     ) {
                return new Token( "bif1", data );
             }
             else if ( data.equals("pow") || data.equals("lt") ||
                       data.equals("le")  || data.equals("eq") ||
                       data.equals("ne")  || data.equals("or") ||
-                      data.equals("and") || data.equals("not")||
+                      data.equals("and")
                     ) {
                return new Token( "bif2", data );
             }
