@@ -64,7 +64,7 @@ public class Lexer {
                   data += (char) sym;
                   state = 5;
                }
-               else if ( sym == '\"' ) {
+               else if ( sym == '/' ) {
                  state = 6;
                }
                else if ( sym == '+' || sym == '-' || sym == '*' ||
@@ -79,7 +79,7 @@ public class Lexer {
                   state = 9;
                   done = true;
                }
-               else if ( sym == "/"){
+               else if ( sym == '/'){
                  state = 10;
                }
                else {
@@ -138,18 +138,18 @@ public class Lexer {
             }
 
             else if ( state == 6 ) {
-               if ( (' '<=sym && sym<='~') && sym != '\"' ) {
+               if ( (' '<=sym && sym<='~') && sym != '/' ) {
                   data += (char) sym;
                   state = 6;     
                }
-               else if ( sym == '\"' ) {
+               else if ( sym == '/' ) {
                   state = 7;
                   done = true;
                }
             }
 
             else if (state == 10) {
-              if ( sym == "*"){
+              if ( sym == '*'){
                 state = 11;
                 data = "";
               }
@@ -160,18 +160,18 @@ public class Lexer {
               }
             }
             else if ( state == 11 ){
-              if( sym == "*"){
+              if( sym == '*'){
                 state = 12;
               }
             }
-            else if ( state = 12 ){
-              if( sym = "/"){
+            else if ( state == 12 ){
+              if( sym == '/'){
                 state = 13;
               }
               else { state = 11; }
             }
 
-            else if ( state = 13 ){
+            else if ( state == 13 ){
               putBackSymbol(sym);
               state = 1;
             }

@@ -59,11 +59,11 @@ public class MemTable {
   }// retrieve
 
     public void changeName(int position, String name){
-      if(position < size) {
-          values.set(position, name);
+      if(position < size()) {
+          names.set(position, name);
       }
       else{
-          store(name, null);
+          store(name, 0);
       }
     }
 

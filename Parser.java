@@ -18,7 +18,7 @@ public class Parser {
 
    public Node parseProgram() {
       System.out.println("-----> parsing <program>:");
-      first = parseFuncCall();
+      Node first = parseFuncCall();
 
       // look ahead to see if there are more statement's
       Token token = lex.getNextToken();
@@ -36,7 +36,7 @@ public class Parser {
    private Node parseFuncCall() {
       System.out.println("-----> parsing <funcCall>:");
       Token token = lex.getNextToken();
-      funcName = token.getDetails();
+      String funcName = token.getDetails();
       token = lex.getNextToken();
       errorCheck( token, "single", "(" );
       token = lex.getNextToken();
@@ -73,7 +73,7 @@ public class Parser {
       Token token = lex.getNextToken();
       errorCheck( token, "var", "def" );
       token = lex.getNextToken();
-      funcName = token.getDetails();
+      String funcName = token.getDetails();
       token = lex.getNextToken();
       errorCheck( token, "single", "(" );
       token = lex.getNextToken();
@@ -122,14 +122,14 @@ public class Parser {
       Token token = lex.getNextToken();
       String varName = token.getDetails();
       // look ahead to see if there are more params
-      Token token = lex.getNextToken();
+      token = lex.getNextToken();
       if(token.getDetails() == ")"){
-         return new Node("params", varName, first, null, null);
+         return new Node("params", varName, null, null, null);
       }
       else {
-         lerrorCheck( token, "single", "," );
-         Node second = parseParams();
-         return new Node("params", varName, first, second, null);
+         errorCheck( token, "single", "," );
+         Node first = parseParams();
+         return new Node("params", varName, first, null, null);
       }
    }
 
@@ -156,7 +156,7 @@ public class Parser {
  
       Token token = lex.getNextToken();
       if ( token.isKind("string") ){
-         return new Node( "print", token.getDetails(), null, null, null )
+         return new Node( "print", token.getDetails(), null, null, null );
       }
 
       else if ( token.isKind("var") && token.getDetails() == "return" ){
@@ -172,7 +172,7 @@ public class Parser {
                return  new Node("if", first, null, null);
             }
             else{
-               lex.putBackToken();
+               lex.putBackToken(token);
                Node third = parseStatements();
                return  new Node("if", first, null, third);
             }
@@ -183,7 +183,7 @@ public class Parser {
                return  new Node("if", first, second, null);
             }
             else{
-               lex.putBackToken();
+               lex.putBackToken(token);
                Node third = parseStatements();
                return  new Node("if", first, second, third);
             }
@@ -210,6 +210,7 @@ public class Parser {
          System.exit(1);
          return null;
       }
+      return null;
    }// <statement>
 
    private Node parseExpr() {
