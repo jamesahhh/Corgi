@@ -127,6 +127,7 @@ public class Parser {
       // look ahead to see if there are more params
       token = lex.getNextToken();
       if(token.getDetails() == ")"){
+      if(token.getDetails().equals(")")){
          return new Node("params", varName, null, null, null);
       }
       else {
