@@ -109,7 +109,7 @@ public class Parser {
       System.out.println("-----> parsing <args>:");
       Node first = parseExpr();
       Token token = lex.getNextToken();
-      if(token.getDetails() == ")"){
+      if(token.getDetails().equals(")") ){
          lex.putBackToken(token);
          return new Node("args", first, null, null);
       }
@@ -126,7 +126,6 @@ public class Parser {
       String varName = token.getDetails();
       // look ahead to see if there are more params
       token = lex.getNextToken();
-      if(token.getDetails() == ")"){
       if(token.getDetails().equals(")")){
          return new Node("params", varName, null, null, null);
       }
@@ -181,6 +180,8 @@ public class Parser {
          token = lex.getNextToken();
          if(token.getDetails() == "else"){
             if(token.getDetails() == "end"){
+         if(token.getDetails().equals("else")){
+            if(token.getDetails().equals("end")){
                return  new Node("if", first, null, null);
             }
             else{
@@ -192,6 +193,7 @@ public class Parser {
          else{
             Node second = parseStatements();
             if(token.getDetails() == "end"){
+            if(token.getDetails().equals("end")){
                return  new Node("if", first, second, null);
             }
             else{
