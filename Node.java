@@ -278,7 +278,7 @@ public class Node {
       while (!found && !eof) {
         System.out.println("Looking for function " + info);
         System.out.println("Looking at function " + node.first.info);
-        if (info == node.first.info) {
+        if (info.equals(node.first.info)) {
           found = true;
           node.first.execute();
         }
