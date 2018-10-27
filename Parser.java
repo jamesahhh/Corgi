@@ -276,6 +276,16 @@ public class Parser {
          return new Node("num", token.getDetails(), null, null, null );
       }
       else if ( token.isKind("var") ) {
+         Token tempura = lex.getNextToken();
+         if( tempura.matches( "single", "(" )) {           
+            lex.putBackToken(tempura);
+            lex.putBackToken(token);
+            Node first = parseFuncCall();
+            return first;
+         }
+         else{
+            lex.putBackToken(tempura);
+         }
          return new Node("var", token.getDetails(), null, null, null );
       }
       else if ( token.matches("single","(") ) {
