@@ -154,9 +154,9 @@ public class Parser {
  
       Token token = lex.getNextToken();
       if ( token.isKind("string") ){
-         return new Node( "print", token.getDetails(), null, null, null )
+         return new Node( "print", token.getDetails(), null, null, null );
       }
-      else if ( token.isKind("var" && token.getDetails() != "if" )) {
+      else if ( token.isKind("var")&& token.getDetails() != "if" ) {
             // --------------->>>   <var> = <expr>
             String varName = token.getDetails();
             token = lex.getNextToken();
@@ -172,7 +172,7 @@ public class Parser {
             token = lex.getNextToken();
             // --> if <expr> else end
             if ( token.isKind("var") && token.getDetails() == "end" ) {
-               return new Node( "stmt", "ifelse1" , first, null, null)
+               return new Node( "stmt", "ifelse1" , first, null, null);
             }
             // --> if <expr> else <statements> end
             else {
@@ -180,7 +180,7 @@ public class Parser {
                Node second = parseStatements();
                token = lex.getNextToken();
                // break if end not found for if-else
-               errorCheck( token, "var", "end" )
+               errorCheck( token, "var", "end" );
                return new Node("stmt", "ifelse2", first, second, null);
             }
          }
