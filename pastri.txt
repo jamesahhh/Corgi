@@ -1,0 +1,31 @@
+main()
+
+def main()
+
+"enter row: "
+row = input()
+
+"enter col: "
+col = input()
+
+answer = pastri(row,col)
+
+"value in Pascal's triangle is "   
+print(answer)
+nl()
+
+return 0
+end
+
+def pastri( row, col )
+
+   if or( eq(col,0), eq(row,col) )
+      return 1
+   else
+      r1 = pastri( row-1, col-1 )
+      r2 = pastri( row-1, col )
+      r = r1+r2
+      return r
+   end
+
+end

@@ -1,0 +1,54 @@
+main()
+
+def main()
+
+  "enter x:  "  x = input()
+
+  cat = categorize(x)
+  "category is "   print(cat) nl()
+
+return cat
+end
+
+def categorize(x)
+
+  if le(x,4)
+     if le(x,2)
+        if lt(x,2)
+           case = 1
+           return case
+        else
+           case = 2
+           return case
+        end
+     else
+        if lt(x,4)
+           case = 3
+           return case
+        else
+           case = 4
+           return case
+        end
+     end
+  else
+     if le(x,6)
+        if lt(x,6)
+           case = 5
+           return case
+        else
+           case = 6
+           return case
+        end
+     else
+        if lt(x,8)
+           case = 7
+           return case
+        else
+           case = 8
+           return case
+        end
+     end
+  end
+
+return 0
+end

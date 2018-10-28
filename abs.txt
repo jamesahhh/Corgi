@@ -1,0 +1,23 @@
+main()
+
+def main()
+
+"enter a number: "
+x = input()
+
+"absolute value of this number is " 
+print(abs(x))
+nl()
+
+return 0
+end
+
+def abs(a)
+
+if lt(a,0)
+  return -a
+else
+  return a
+end
+
+end

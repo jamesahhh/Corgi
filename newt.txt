@@ -1,0 +1,48 @@
+/*  use finite difference
+    Newton's method to find
+    root of hard-coded function f
+    near starting guess
+*/
+
+main()
+
+/*  the target function */
+/* ------------------------------------*/
+def f(x)
+   return pow(x,2) - 3
+end
+
+/* driver */
+/* ------------------------------------*/
+def main()
+   "enter starting guess for root: "
+   x = input()
+   root = findRoot(x)
+   "Approximate root is " print(root) nl()
+   return 0
+end
+
+/*  finite difference Newton's method */
+/* ------------------------------------*/
+def findRoot(x)
+   h = 0.0000001
+   if lt( abs(f(x)), h*h )
+      return x
+   else
+      fx = f(x)
+      fprime = (f(x+h) - fx) / h
+      xplus = x - fx/fprime
+      "improved root is "  print(xplus) nl()
+      return findRoot(xplus)
+   end
+end
+
+/*  absolute value function */
+/* ------------------------------------*/
+def abs(x)
+   if lt(x,0)
+      return -x
+   else
+      return x
+   end
+end
