@@ -11,13 +11,12 @@ import java.awt.*;
 public class Node {
 
   public static int count = 0; // maintain unique id for each node
-
-  private int rv; // to store return value of evaluate for if-else
+  private double rv; // to store return value of evaluate for if-else
   private int id;
-  private int rootId = 0;
-  private int a = 0, p = 0;
+  public static int argCount = 0, paramCount = 0; //Used to compare number of arguments to number of parameters
 
-  private boolean returnBool;
+  private static Node funcRoot;
+  private boolean returnBool; //true if return statement has been executed
 
   private String kind; // non-terminal or terminal category for the node
   private String info; // extra information about the node such as
@@ -26,8 +25,8 @@ public class Node {
   // references to children in the parse tree
   private Node first, second, third;
 
-  // memory table shared by all nodes
-  private static MemTable table = new MemTable();
+  // memory tables shared by all nodes but private to a function
+  private static Stack<MemTable> tables;
 
   private static Scanner keys = new Scanner(System.in);
 
@@ -166,61 +165,73 @@ public class Node {
   public void execute() {
 
     if (kind.equals("program")) {
+      tables = new Stack<MemTable>();
+      if (second != null)
+        funcRoot = second;
+      else
+        error("Program does have any function deffinitions");
       if (first != null)
-        first.execute();
+        first.evaluate();
       else
         error("Program does have an initial function call");
     }
 
     else if (kind.equals("funcDef")) {
-      first.execute();
-      second.execute();
+        paramCount = 0;
+        if(first != null) {
+            first.execute();
+        }
+        if (paramCount != argCount)
+            error("Function " + info + " has " + paramCount + " parameters and was passed " + argCount + "arguments");
+        if(second != null)
+            second.execute();
     }
 
     else if (kind.equals("params")) {
-      table.name[p] = info;
-      p++;
-      if (first != null) {
-        first.execute();
-      }
-    } else if (kind.equals("args")) {
-      table.value[a] = (Double) info;
-      a++;
-      if (first != null) {
-        first.execute();
-      }
+        MemTable table = tables.pop();
+        table.changeName(paramCount, info);
+        tables.push(table);
+        paramCount++;
+        if (first != null) {
+            first.execute();
+        }
+    }
+
+    else if (kind.equals("args")) {
+        MemTable table = tables.pop();
+        table.store((Integer.toString(argCount)), first.evaluate());
+        tables.push(table);
+        argCount++;
+        if (second != null) {
+          second.execute();
+        }
     }
 
     else if (kind.equals("stmts")) {
       if (first != null) {
         first.execute();
-        if (second != null) {
+      }
+      if (second != null && !returnBool) {
           second.execute();
+      }
+    }
+
+    else if (kind.equals("if")) {
+      if(first.evaluate() != 0){
+        if(second != null){
+          second.execute();
+        }
+      }
+      else{
+        if(third != null){
+          third.execute();
         }
       }
     }
 
-    else if (kind.equals("stmt")) {
+    else if (kind.equals("return")) {
       rv = first.evaluate();
-      if (info.equals("ifelse1")) {
-        // do nothing but evaluate expression
-      } else if (info.equals("ifelse2")) {
-        if (rv = 0) {
-          second.execute(); // runs else statements
-        }
-      } else if (info.equals("ifelse_2")) {
-        if (rv > 0) {
-          second.execute(); // if true run statements no else
-        }
-      } else if (info.equals("ifelse3")) {
-        if (rv > 0) {
-          second.execute(); // if expr > 1
-        } else {
-          third.execute(); // if exp <= 0
-        }
-      } else if (info.equals("return")) {
-        // TODO how do we handle returning an expression
-      }
+      returnBool = true;
     }
 
     else if (kind.equals("print")) {
@@ -242,7 +253,9 @@ public class Node {
 
     else if (kind.equals("sto")) {
       double value = first.evaluate();
+      MemTable table = tables.pop();
       table.store(info, value);
+      tables.push(table);
     }
 
     else {
@@ -256,34 +269,37 @@ public class Node {
 
     if (kind.equals("funcCall")) {
       boolean found = false, eof = false;
-      Node node = Node[rootId];
-      if (node.second != null)
-        node = node.second;
-      else
-        error("Program does not have any function deffinitions");
+      tables.push(new MemTable());
+      argCount = 0;
+      if(first != null){
+          first.execute();
+      }
+      Node node = funcRoot;
       while (!found && !eof) {
-        if (info == node.first.info) {
+        System.out.println("Looking for function " + info);
+        System.out.println("Looking at function " + node.first.info);
+        if (info.equals(node.first.info)) {
           found = true;
-          node.first.evaluate();
-        } else {
+          node.first.execute();
+        }
+        else {
           if (node.second != null) {
             node = node.second;
-          } else {
+          }
+          else {
             eof = true;
             error("Function " + info + " was not found.");
           }
         }
       }
-      table = new MemTable();
-      a = 0;
-      p = 0;
+      tables.pop();
       returnBool = false;
       return rv;
     }
 
     else if (kind.equals("lt")) {
-      double a = (double) first.info;
-      double b = (double) second.info;
+      double a = Double.parseDouble(first.info);
+      double b = Double.parseDouble(second.info);
 
       if (a < b) {
         return 1;
@@ -292,8 +308,8 @@ public class Node {
       }
     } 
     else if (kind.equals("le")) {
-      double a = (double) first.info;
-      double b = (double) second.info;
+      double a = Double.parseDouble(first.info);
+      double b = Double.parseDouble(second.info);
 
       if (a < b || a == b) {
         return 1;
@@ -302,8 +318,8 @@ public class Node {
       }
     } 
     else if (kind.equals("eq")) {
-      double a = (double) first.info;
-      double b = (double) second.info;
+      double a = Double.parseDouble(first.info);
+      double b = Double.parseDouble(second.info);
 
       if (a == b) {
         return 1;
@@ -312,8 +328,8 @@ public class Node {
       }
     } 
     else if (kind.equals("ne")) {
-      double a = (double) first.info;
-      double b = (double) second.info;
+      double a = Double.parseDouble(first.info);
+      double b = Double.parseDouble(second.info);
 
       if (a != b) {
         return 1;
@@ -322,8 +338,8 @@ public class Node {
       }
     } 
     else if (kind.equals("or")) {
-      double a = (double) first.info;
-      double b = (double) second.info;
+      double a = Double.parseDouble(first.info);
+      double b = Double.parseDouble(second.info);
 
       if (a != 0 || b != 0) {
         return 1;
@@ -332,8 +348,8 @@ public class Node {
       }
     } 
     else if (kind.equals("and")) {
-      double a = (double) first.info;
-      double b = (double) second.info;
+      double a = Double.parseDouble(first.info);
+      double b = Double.parseDouble(second.info);
 
       if (a != 0 && b != 0) {
         return 1;
@@ -342,7 +358,7 @@ public class Node {
       }
     } 
     else if (kind.equals("not")) {
-      double a = (double) first.info;
+      double a = Double.parseDouble(first.info);
 
       if (a == 0) {
         return 1;
@@ -356,6 +372,7 @@ public class Node {
     }
 
     else if (kind.equals("var")) {
+      MemTable table = tables.get(tables.size()-1);
       return table.retrieve(info);
     }
 

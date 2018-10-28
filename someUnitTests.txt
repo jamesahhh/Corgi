@@ -1,0 +1,43 @@
+main()
+
+def main()
+
+"2 < 3? "  print( lt(2,3) ) nl()
+"3 < 2? "  print( lt(3,2) ) nl()
+"3 < 3? "  print( lt(3,3) ) nl()
+
+"2 <= 3? "  print( le(2,3) ) nl()
+"3 <= 2? "  print( le(3,2) ) nl()
+"3 <= 3? "  print( le(3,3) ) nl()
+
+"2 == 2? "  print( eq(2,2) ) nl()
+"3 == 2? "  print( eq(3,2) ) nl()
+
+"2 != 2? "  print( ne(2,2) ) nl()
+"3 != 2? "  print( ne(3,2) ) nl()
+
+"0 and 3 "  print( and(0,3) ) nl()
+"0 and 0 "  print( and(0,0) ) nl()
+"3 and 3 "  print( and(3,3) ) nl()
+
+"0 or 3 "  print( or(0,3) ) nl()
+"0 or 0 "  print( or(0,0) ) nl()
+"3 or 3 "  print( or(3,3) ) nl()
+
+"! 0 "  print( not(0) ) nl()
+"! 3 "  print( not(3) ) nl()
+
+"sqrt(3): "  print( sqrt(3) ) nl()
+"cos(30): "  print( cos(30) ) nl()
+"sin(30): "  print( sin(30) ) nl()
+"atan(1): "  print( atan(1) ) nl()
+"pow(2,.5): "  print( pow(2,.5) ) nl()
+
+"round(2.5): "  print( round(2.5) ) nl()
+"round(2.49999): "  print( round(2.49999) ) nl()
+"trunc(2.49999): "  print( trunc(2.49999) ) nl()
+
+
+
+return 0
+end

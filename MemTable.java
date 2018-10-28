@@ -58,6 +58,15 @@ public class MemTable {
   
   }// retrieve
 
+    public void changeName(int position, String name){
+      if(position < size()) {
+          names.set(position, name);
+      }
+      else{
+          store(name, 0);
+      }
+    }
+
   // return index of name in names, or -1 if
   // not found
   private int findName( String name ) {

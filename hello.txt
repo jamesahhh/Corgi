@@ -1,0 +1,6 @@
+main()
+
+def main()
+   "Hello!" nl()
+   return 0
+end

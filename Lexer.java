@@ -64,7 +64,7 @@ public class Lexer {
                   data += (char) sym;
                   state = 5;
                }
-               else if ( sym == '\"' ) {
+               else if ( sym == '"' ) {
                  state = 6;
                }
                else if ( sym == '+' || sym == '-' || sym == '*' ||
@@ -75,12 +75,15 @@ public class Lexer {
                   state = 8;
                   done = true;
                }
+               else if ( sym == '/'){
+                   state = 10;
+               }
+               else if ( sym == '"'){
+                   state = 14;
+               }
                else if ( sym == -1 ) {// end of file
                   state = 9;
                   done = true;
-               }
-               else if ( sym == "/"){
-                 state = 10;
                }
                else {
                  error("Error in lexical analysis phase with symbol "
@@ -138,18 +141,18 @@ public class Lexer {
             }
 
             else if ( state == 6 ) {
-               if ( (' '<=sym && sym<='~') && sym != '\"' ) {
+               if ( (' '<=sym && sym<='~') && sym != '"' ) {
                   data += (char) sym;
                   state = 6;     
                }
-               else if ( sym == '\"' ) {
+               else if ( sym == '"' ) {
                   state = 7;
                   done = true;
                }
             }
 
             else if (state == 10) {
-              if ( sym == "*"){
+              if ( sym == '*'){
                 state = 11;
                 data = "";
               }
@@ -160,18 +163,18 @@ public class Lexer {
               }
             }
             else if ( state == 11 ){
-              if( sym == "*"){
+              if( sym == '*'){
                 state = 12;
               }
             }
-            else if ( state = 12 ){
-              if( sym = "/"){
+            else if ( state == 12 ){
+              if( sym == '/'){
                 state = 13;
               }
               else { state = 11; }
             }
 
-            else if ( state = 13 ){
+            else if ( state == 13 ){
               putBackSymbol(sym);
               state = 1;
             }
@@ -186,15 +189,21 @@ public class Lexer {
  
          if ( state == 2 ) {
             // see if data matches any special words
-            if ( data.equals("input") ) {
+            if ( data.equals("input") || data.equals("nl") ) {
                return new Token( "bif0", data );
             }
             else if ( data.equals("sqrt") || data.equals("cos") || 
-                      data.equals("sin") || data.equals("atan") 
+                      data.equals("sin")  || data.equals("atan")||
+                      data.equals("round")|| data.equals("trunc") ||
+                      data.equals("not")
                     ) {
                return new Token( "bif1", data );
             }
-            else if ( data.equals("pow") ) {
+            else if ( data.equals("pow") || data.equals("lt") ||
+                      data.equals("le")  || data.equals("eq") ||
+                      data.equals("ne")  || data.equals("or") ||
+                      data.equals("and")
+                    ) {
                return new Token( "bif2", data );
             }
             else if ( data.equals("print") ) {
