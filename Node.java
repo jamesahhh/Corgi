@@ -113,7 +113,7 @@ public class Node {
   // to children
   public void draw(Camera cam, double x, double y, double h, double v) {
 
-    System.out.println("draw node " + id);
+    //System.out.println("draw node " + id);
 
     // set drawing color
     cam.setColor(Color.black);
@@ -127,7 +127,7 @@ public class Node {
     // in a nice, uniform manner
     Node[] children = getChildren();
     int number = children.length;
-    System.out.println("has " + number + " children");
+    //System.out.println("has " + number + " children");
 
     double top = y - 0.75 * v;
 
@@ -234,7 +234,10 @@ public class Node {
       returnBool = true;
     }
 
-    else if (kind.equals("print")) {
+    else if (info.equals("print")) {
+      System.out.print();
+    }
+    else if (kind.equals("prtstr")) {
       System.out.print(info);
     }
 
@@ -259,7 +262,7 @@ public class Node {
     }
 
     else {
-      error("Unknown kind of node [" + kind + "]");
+      error("Unknown node kind [" + kind + "], info [" + info + "] execute");
     }
 
   }// execute
@@ -268,7 +271,7 @@ public class Node {
   public double evaluate() {
 
     if (kind.equals("funcCall")) {
-      boolean found = false, eof = false;
+      boolean found = false , eof = false;
       tables.push(new MemTable());
       argCount = 0;
       if(first != null){
@@ -295,6 +298,13 @@ public class Node {
       tables.pop();
       returnBool = false;
       return rv;
+    }
+    else if (kind.equals("args")) {
+        MemTable table = tables.pop();
+        rv = first.evaluate();
+        if (second != null) {
+          second.execute();
+        }
     }
 
     else if (kind.equals("lt")) {
@@ -436,7 +446,7 @@ public class Node {
     }
 
     else {
-      error("Unknown node kind [" + kind + "]");
+      error("Unknown node kind [" + kind + "], info [" + info + "] evaluate" );
       return 0;
     }
 

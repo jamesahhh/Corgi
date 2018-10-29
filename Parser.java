@@ -159,7 +159,7 @@ public class Parser {
  
       Token token = lex.getNextToken();
       if ( token.isKind("string") ){
-         return new Node( "print", token.getDetails(), null, null, null );
+         return new Node( "prtstr", token.getDetails(), null, null, null );
       }
 
       if( token.isKind("bif1")|| token.isKind("bif2")) {
@@ -219,7 +219,7 @@ public class Parser {
             errorCheck(temp, "single", "=");
             return new Node("sto", varName, first, null, null);
          }
-         else if(temp.getDetails() == "(") {// --------------->>>   <funcCall>()
+         else if(temp.getDetails().equals("(")) {// --------------->>>   <funcCall>()
             lex.putBackToken(temp);
             lex.putBackToken(token);
             return parseFuncCall();
