@@ -162,19 +162,28 @@ public class Parser {
          return new Node( "prtstr", token.getDetails(), null, null, null );
       }
 
-      if( token.isKind("bif1")|| token.isKind("bif2")) {
-         Node first = parseParams();
-         token = lex.getNextToken();
-         errorCheck( token, "single", "(" );
-         return new Node ( token.getDetails(), first, null, null);
-      }
-
       else if ( token.matches("bif0","nl") ) {
          token = lex.getNextToken();
          errorCheck( token, "single", "(" );
          token = lex.getNextToken();
          errorCheck( token, "single", ")" );
          return new Node( "nl", null, null, null );
+      }
+
+      else if ( token.matches("bif1","print") ) {
+         token = lex.getNextToken();
+         errorCheck( token, "single", "(" );
+         Node first = parseExpr();
+         token = lex.getNextToken();
+         errorCheck( token, "single", ")" );
+         return new Node( "print", first, null, null );
+      }
+
+      if( token.isKind("bif1")|| token.isKind("bif2")) {
+         Node first = parseParams();
+         token = lex.getNextToken();
+         errorCheck( token, "single", "(" );
+         return new Node ( token.getDetails(), first, null, null);
       }
 
       else if ( token.matches("var","return") ){

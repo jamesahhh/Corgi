@@ -224,7 +224,7 @@ public class Node {
       System.out.print(info);
     }
 
-    else if (kind.equals("prtexp")) {
+    else if (kind.equals("print")) {
       double value = first.evaluate();
       if (value % 1 == 0) {
         System.out.print((int) value);
@@ -259,8 +259,8 @@ public class Node {
       argNode = first;
       Node node = funcRoot;
       while (!found && !eof) {
-        System.out.println("Looking for function " + info);
-        System.out.println("Looking at function " + node.first.info);
+        //System.out.println("Looking for function " + info);
+        //System.out.println("Looking at function " + node.first.info);
         if (info.equals(node.first.info)) {
           found = true;
           node.first.execute();
@@ -281,9 +281,19 @@ public class Node {
     }
 
     else if (kind.equals("lt")) {
-      double a = Double.parseDouble(first.info);
-      double b = Double.parseDouble(second.info);
-
+      double a, b;
+      if(first.kind.equals("var")){
+        a = first.evaluate();
+      }
+      else {
+        a = Double.parseDouble(first.info);
+      }
+      if(first.kind.equals("var")){
+        b = first.evaluate();
+      }
+      else {
+        b = Double.parseDouble(second.info);
+      }
       if (a < b) {
         return 1;
       } else {
@@ -291,9 +301,19 @@ public class Node {
       }
     } 
     else if (kind.equals("le")) {
-      double a = Double.parseDouble(first.info);
-      double b = Double.parseDouble(second.info);
-
+      double a, b;
+      if(first.kind.equals("var")){
+        a = first.evaluate();
+      }
+      else {
+        a = Double.parseDouble(first.info);
+      }
+      if(first.kind.equals("var")){
+        b = first.evaluate();
+      }
+      else {
+        b = Double.parseDouble(second.info);
+      }
       if (a < b || a == b) {
         return 1;
       } else {
@@ -301,9 +321,19 @@ public class Node {
       }
     } 
     else if (kind.equals("eq")) {
-      double a = Double.parseDouble(first.info);
-      double b = Double.parseDouble(second.info);
-
+      double a, b;
+      if(first.kind.equals("var")){
+        a = first.evaluate();
+      }
+      else {
+        a = Double.parseDouble(first.info);
+      }
+      if(first.kind.equals("var")){
+        b = first.evaluate();
+      }
+      else {
+        b = Double.parseDouble(second.info);
+      }
       if (a == b) {
         return 1;
       } else {
@@ -311,9 +341,19 @@ public class Node {
       }
     } 
     else if (kind.equals("ne")) {
-      double a = Double.parseDouble(first.info);
-      double b = Double.parseDouble(second.info);
-
+      double a, b;
+      if(first.kind.equals("var")){
+        a = first.evaluate();
+      }
+      else {
+        a = Double.parseDouble(first.info);
+      }
+      if(first.kind.equals("var")){
+        b = first.evaluate();
+      }
+      else {
+        b = Double.parseDouble(second.info);
+      }
       if (a != b) {
         return 1;
       } else {
@@ -321,9 +361,19 @@ public class Node {
       }
     } 
     else if (kind.equals("or")) {
-      double a = Double.parseDouble(first.info);
-      double b = Double.parseDouble(second.info);
-
+      double a, b;
+      if(first.kind.equals("var")){
+        a = first.evaluate();
+      }
+      else {
+        a = Double.parseDouble(first.info);
+      }
+      if(first.kind.equals("var")){
+        b = first.evaluate();
+      }
+      else {
+        b = Double.parseDouble(second.info);
+      }
       if (a != 0 || b != 0) {
         return 1;
       } else {
@@ -331,9 +381,19 @@ public class Node {
       }
     } 
     else if (kind.equals("and")) {
-      double a = Double.parseDouble(first.info);
-      double b = Double.parseDouble(second.info);
-
+      double a, b;
+      if(first.kind.equals("var")){
+        a = first.evaluate();
+      }
+      else {
+        a = Double.parseDouble(first.info);
+      }
+      if(first.kind.equals("var")){
+        b = first.evaluate();
+      }
+      else {
+        b = Double.parseDouble(second.info);
+      }
       if (a != 0 && b != 0) {
         return 1;
       } else {
@@ -341,8 +401,13 @@ public class Node {
       }
     } 
     else if (kind.equals("not")) {
-      double a = Double.parseDouble(first.info);
-
+      double a;
+      if(first.kind.equals("var")){
+        a = first.evaluate();
+      }
+      else {
+        a = Double.parseDouble(first.info);
+      }
       if (a == 0) {
         return 1;
       } else {

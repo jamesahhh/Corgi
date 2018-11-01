@@ -195,7 +195,7 @@ public class Lexer {
             else if ( data.equals("sqrt") || data.equals("cos") || 
                       data.equals("sin")  || data.equals("atan")||
                       data.equals("round")|| data.equals("trunc") ||
-                      data.equals("not")
+                      data.equals("not") || data.equals("print")
                     ) {
                return new Token( "bif1", data );
             }

@@ -13,7 +13,7 @@ return 0
 end
 
 def abs(a)
-
+"hit this"
 if lt(a,0)
   return -a
 else
