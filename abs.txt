@@ -18,6 +18,5 @@ if lt(a,0)
   return -a
 else
   return a
-end
 
 end

@@ -159,14 +159,7 @@ public class Parser {
  
       Token token = lex.getNextToken();
       if ( token.isKind("string") ){
-         return new Node( "print", token.getDetails(), null, null, null );
-      }
-
-      if( token.isKind("bif1")|| token.isKind("bif2")) {
-         Node first = parseParams();
-         token = lex.getNextToken();
-         errorCheck( token, "single", "(" );
-         return new Node ( token.getDetails(), first, null, null);
+         return new Node( "prtstr", token.getDetails(), null, null, null );
       }
 
       else if ( token.matches("bif0","nl") ) {
@@ -175,6 +168,22 @@ public class Parser {
          token = lex.getNextToken();
          errorCheck( token, "single", ")" );
          return new Node( "nl", null, null, null );
+      }
+
+      else if ( token.matches("bif1","print") ) {
+         token = lex.getNextToken();
+         errorCheck( token, "single", "(" );
+         Node first = parseExpr();
+         token = lex.getNextToken();
+         errorCheck( token, "single", ")" );
+         return new Node( "print", first, null, null );
+      }
+
+      if( token.isKind("bif1")|| token.isKind("bif2")) {
+         Node first = parseParams();
+         token = lex.getNextToken();
+         errorCheck( token, "single", "(" );
+         return new Node ( token.getDetails(), first, null, null);
       }
 
       else if ( token.matches("var","return") ){
@@ -219,7 +228,7 @@ public class Parser {
             errorCheck(temp, "single", "=");
             return new Node("sto", varName, first, null, null);
          }
-         else if(temp.getDetails() == "(") {// --------------->>>   <funcCall>()
+         else if(temp.getDetails().equals("(")) {// --------------->>>   <funcCall>()
             lex.putBackToken(temp);
             lex.putBackToken(token);
             return parseFuncCall();

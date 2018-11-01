@@ -195,7 +195,7 @@ public class Lexer {
             else if ( data.equals("sqrt") || data.equals("cos") || 
                       data.equals("sin")  || data.equals("atan")||
                       data.equals("round")|| data.equals("trunc") ||
-                      data.equals("not")
+                      data.equals("not") || data.equals("print")
                     ) {
                return new Token( "bif1", data );
             }
@@ -206,12 +206,14 @@ public class Lexer {
                     ) {
                return new Token( "bif2", data );
             }
+            /* I think these need to be removed
             else if ( data.equals("print") ) {
                return new Token( "print", "" );
             }
             else if ( data.equals("newline") ) {
                return new Token( "newline", "" );
             }
+            */
             else {// is just a variable
                return new Token( "var", data );
             }

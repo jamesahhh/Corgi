@@ -13,9 +13,8 @@ public class Node {
   public static int count = 0; // maintain unique id for each node
   private double rv; // to store return value of evaluate for if-else
   private int id;
-  public static int argCount = 0, paramCount = 0; //Used to compare number of arguments to number of parameters
 
-  private static Node funcRoot;
+  private static Node funcRoot, paramNode, argNode;
   private boolean returnBool; //true if return statement has been executed
 
   private String kind; // non-terminal or terminal category for the node
@@ -113,7 +112,7 @@ public class Node {
   // to children
   public void draw(Camera cam, double x, double y, double h, double v) {
 
-    System.out.println("draw node " + id);
+    //System.out.println("draw node " + id);
 
     // set drawing color
     cam.setColor(Color.black);
@@ -127,7 +126,7 @@ public class Node {
     // in a nice, uniform manner
     Node[] children = getChildren();
     int number = children.length;
-    System.out.println("has " + number + " children");
+    //System.out.println("has " + number + " children");
 
     double top = y - 0.75 * v;
 
@@ -177,34 +176,16 @@ public class Node {
     }
 
     else if (kind.equals("funcDef")) {
-        paramCount = 0;
-        if(first != null) {
-            first.execute();
+        MemTable table = tables.pop();
+        paramNode = first;
+        while(argNode != null && paramNode != null){
+          table.store(paramNode.info, argNode.first.evaluate());
+          paramNode = paramNode.first;
+          argNode = argNode.second;
         }
-        if (paramCount != argCount)
-            error("Function " + info + " has " + paramCount + " parameters and was passed " + argCount + "arguments");
+        tables.push(table);
         if(second != null)
             second.execute();
-    }
-
-    else if (kind.equals("params")) {
-        MemTable table = tables.pop();
-        table.changeName(paramCount, info);
-        tables.push(table);
-        paramCount++;
-        if (first != null) {
-            first.execute();
-        }
-    }
-
-    else if (kind.equals("args")) {
-        MemTable table = tables.pop();
-        table.store((Integer.toString(argCount)), first.evaluate());
-        tables.push(table);
-        argCount++;
-        if (second != null) {
-          second.execute();
-        }
     }
 
     else if (kind.equals("stmts")) {
@@ -222,7 +203,7 @@ public class Node {
           second.execute();
         }
       }
-      else{
+      else {
         if(third != null){
           third.execute();
         }
@@ -231,14 +212,15 @@ public class Node {
 
     else if (kind.equals("return")) {
       rv = first.evaluate();
+      System.out.print("\nBefore returning from function: " + rv);
       returnBool = true;
     }
 
-    else if (kind.equals("print")) {
+    else if (kind.equals("prtstr")) {
       System.out.print(info);
     }
 
-    else if (kind.equals("prtexp")) {
+    else if (kind.equals("print")) {
       double value = first.evaluate();
       if (value % 1 == 0) {
         System.out.print((int) value);
@@ -259,7 +241,7 @@ public class Node {
     }
 
     else {
-      error("Unknown kind of node [" + kind + "]");
+      error("Unknown node kind [" + kind + "], info [" + info + "] execute");
     }
 
   }// execute
@@ -268,16 +250,13 @@ public class Node {
   public double evaluate() {
 
     if (kind.equals("funcCall")) {
-      boolean found = false, eof = false;
+      boolean found = false , eof = false;
       tables.push(new MemTable());
-      argCount = 0;
-      if(first != null){
-          first.execute();
-      }
+      argNode = first;
       Node node = funcRoot;
       while (!found && !eof) {
-        System.out.println("Looking for function " + info);
-        System.out.println("Looking at function " + node.first.info);
+        //System.out.println("Looking for function " + info);
+        //System.out.println("Looking at function " + node.first.info);
         if (info.equals(node.first.info)) {
           found = true;
           node.first.execute();
@@ -294,13 +273,24 @@ public class Node {
       }
       tables.pop();
       returnBool = false;
+      System.out.print("\nAfter returning from function: " + rv);
       return rv;
     }
 
     else if (kind.equals("lt")) {
-      double a = Double.parseDouble(first.info);
-      double b = Double.parseDouble(second.info);
-
+      double a, b;
+      if(first.kind.equals("var")){
+        a = first.evaluate();
+      }
+      else {
+        a = Double.parseDouble(first.info);
+      }
+      if(first.kind.equals("var")){
+        b = first.evaluate();
+      }
+      else {
+        b = Double.parseDouble(second.info);
+      }
       if (a < b) {
         return 1;
       } else {
@@ -308,9 +298,19 @@ public class Node {
       }
     } 
     else if (kind.equals("le")) {
-      double a = Double.parseDouble(first.info);
-      double b = Double.parseDouble(second.info);
-
+      double a, b;
+      if(first.kind.equals("var")){
+        a = first.evaluate();
+      }
+      else {
+        a = Double.parseDouble(first.info);
+      }
+      if(first.kind.equals("var")){
+        b = first.evaluate();
+      }
+      else {
+        b = Double.parseDouble(second.info);
+      }
       if (a < b || a == b) {
         return 1;
       } else {
@@ -318,9 +318,19 @@ public class Node {
       }
     } 
     else if (kind.equals("eq")) {
-      double a = Double.parseDouble(first.info);
-      double b = Double.parseDouble(second.info);
-
+      double a, b;
+      if(first.kind.equals("var")){
+        a = first.evaluate();
+      }
+      else {
+        a = Double.parseDouble(first.info);
+      }
+      if(first.kind.equals("var")){
+        b = first.evaluate();
+      }
+      else {
+        b = Double.parseDouble(second.info);
+      }
       if (a == b) {
         return 1;
       } else {
@@ -328,9 +338,19 @@ public class Node {
       }
     } 
     else if (kind.equals("ne")) {
-      double a = Double.parseDouble(first.info);
-      double b = Double.parseDouble(second.info);
-
+      double a, b;
+      if(first.kind.equals("var")){
+        a = first.evaluate();
+      }
+      else {
+        a = Double.parseDouble(first.info);
+      }
+      if(first.kind.equals("var")){
+        b = first.evaluate();
+      }
+      else {
+        b = Double.parseDouble(second.info);
+      }
       if (a != b) {
         return 1;
       } else {
@@ -338,9 +358,19 @@ public class Node {
       }
     } 
     else if (kind.equals("or")) {
-      double a = Double.parseDouble(first.info);
-      double b = Double.parseDouble(second.info);
-
+      double a, b;
+      if(first.kind.equals("var")){
+        a = first.evaluate();
+      }
+      else {
+        a = Double.parseDouble(first.info);
+      }
+      if(first.kind.equals("var")){
+        b = first.evaluate();
+      }
+      else {
+        b = Double.parseDouble(second.info);
+      }
       if (a != 0 || b != 0) {
         return 1;
       } else {
@@ -348,9 +378,19 @@ public class Node {
       }
     } 
     else if (kind.equals("and")) {
-      double a = Double.parseDouble(first.info);
-      double b = Double.parseDouble(second.info);
-
+      double a, b;
+      if(first.kind.equals("var")){
+        a = first.evaluate();
+      }
+      else {
+        a = Double.parseDouble(first.info);
+      }
+      if(first.kind.equals("var")){
+        b = first.evaluate();
+      }
+      else {
+        b = Double.parseDouble(second.info);
+      }
       if (a != 0 && b != 0) {
         return 1;
       } else {
@@ -358,8 +398,13 @@ public class Node {
       }
     } 
     else if (kind.equals("not")) {
-      double a = Double.parseDouble(first.info);
-
+      double a;
+      if(first.kind.equals("var")){
+        a = first.evaluate();
+      }
+      else {
+        a = Double.parseDouble(first.info);
+      }
       if (a == 0) {
         return 1;
       } else {
@@ -372,8 +417,10 @@ public class Node {
     }
 
     else if (kind.equals("var")) {
-      MemTable table = tables.get(tables.size()-1);
-      return table.retrieve(info);
+      MemTable table = tables.pop();
+      double value = table.retrieve(info);
+      tables.push(table);
+      return value;
     }
 
     else if (kind.equals("+") || kind.equals("-")) {
@@ -436,10 +483,9 @@ public class Node {
     }
 
     else {
-      error("Unknown node kind [" + kind + "]");
+      error("Unknown node kind [" + kind + "], info [" + info + "] evaluate" );
       return 0;
     }
-
   }// evaluate
 
 }// Node
