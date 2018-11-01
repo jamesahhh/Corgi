@@ -383,8 +383,8 @@ public class Node {
       else {
         a = Double.parseDouble(first.info);
       }
-      if(second.kind.equals("var")){
-        b = second.evaluate();
+      if(first.kind.equals("var")){
+        b = first.evaluate();
       }
       else {
         b = Double.parseDouble(second.info);
