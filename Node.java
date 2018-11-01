@@ -203,7 +203,7 @@ public class Node {
           second.execute();
         }
       }
-      else{
+      else {
         if(third != null){
           third.execute();
         }
@@ -212,14 +212,10 @@ public class Node {
 
     else if (kind.equals("return")) {
       rv = first.evaluate();
+      System.out.print("\nBefore returning from function: " + rv);
       returnBool = true;
     }
 
-    /*
-    else if (info.equals("print")) {
-      System.out.print();
-    }
-    */
     else if (kind.equals("prtstr")) {
       System.out.print(info);
     }
@@ -277,6 +273,7 @@ public class Node {
       }
       tables.pop();
       returnBool = false;
+      System.out.print("\nAfter returning from function: " + rv);
       return rv;
     }
 
