@@ -11,7 +11,7 @@ import java.awt.*;
 public class Node {
 
   public static int count = 0; // maintain unique id for each node
-  private double rv; // to store return value of evaluate for if-else
+  private static double rv; // to store return value of evaluate for if-else
   private int id;
 
   private static Node funcRoot, paramNode, argNode;
