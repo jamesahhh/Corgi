@@ -212,7 +212,6 @@ public class Node {
 
     else if (kind.equals("return")) {
       rv = first.evaluate();
-      System.out.print("\nBefore returning from function: " + rv);
       returnBool = true;
     }
 
@@ -273,7 +272,6 @@ public class Node {
       }
       tables.pop();
       returnBool = false;
-      System.out.print("\nAfter returning from function: " + rv);
       return rv;
     }
 
