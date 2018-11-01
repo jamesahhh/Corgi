@@ -189,7 +189,10 @@ public class Node {
     }
 
     else if (kind.equals("stmts")) {
-      if (first != null) {
+      if(first != null && first.kind.equals("funcCall")) {
+        first.evaluate();
+      }
+      else if (first != null) {
         first.execute();
       }
       if (second != null && !returnBool) {
