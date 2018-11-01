@@ -13,9 +13,8 @@ public class Node {
   public static int count = 0; // maintain unique id for each node
   private double rv; // to store return value of evaluate for if-else
   private int id;
-  public static int argCount = 0, paramCount = 0; //Used to compare number of arguments to number of parameters
 
-  private static Node funcRoot;
+  private static Node funcRoot, paramNode, argNode;
   private boolean returnBool; //true if return statement has been executed
 
   private String kind; // non-terminal or terminal category for the node
@@ -177,34 +176,16 @@ public class Node {
     }
 
     else if (kind.equals("funcDef")) {
-        paramCount = 0;
-        if(first != null) {
-            first.execute();
+        MemTable table = tables.pop();
+        paramNode = first;
+        while(argNode != null && paramNode != null){
+          table.store(paramNode.info, argNode.first.evaluate());
+          paramNode = paramNode.first;
+          argNode = argNode.second;
         }
-        if (paramCount != argCount)
-            error("Function " + info + " has " + paramCount + " parameters and was passed " + argCount + "arguments");
+        tables.push(table);
         if(second != null)
             second.execute();
-    }
-
-    else if (kind.equals("params")) {
-        MemTable table = tables.pop();
-        table.changeName(paramCount, info);
-        tables.push(table);
-        paramCount++;
-        if (first != null) {
-            first.execute();
-        }
-    }
-
-    else if (kind.equals("args")) {
-        MemTable table = tables.pop();
-        table.store((Integer.toString(argCount)), first.evaluate());
-        tables.push(table);
-        argCount++;
-        if (second != null) {
-          second.execute();
-        }
     }
 
     else if (kind.equals("stmts")) {
@@ -234,9 +215,11 @@ public class Node {
       returnBool = true;
     }
 
+    /*
     else if (info.equals("print")) {
       System.out.print();
     }
+    */
     else if (kind.equals("prtstr")) {
       System.out.print(info);
     }
@@ -273,10 +256,7 @@ public class Node {
     if (kind.equals("funcCall")) {
       boolean found = false , eof = false;
       tables.push(new MemTable());
-      argCount = 0;
-      if(first != null){
-          first.execute();
-      }
+      argNode = first;
       Node node = funcRoot;
       while (!found && !eof) {
         System.out.println("Looking for function " + info);
@@ -298,13 +278,6 @@ public class Node {
       tables.pop();
       returnBool = false;
       return rv;
-    }
-    else if (kind.equals("args")) {
-        MemTable table = tables.pop();
-        rv = first.evaluate();
-        if (second != null) {
-          second.execute();
-        }
     }
 
     else if (kind.equals("lt")) {
@@ -382,8 +355,10 @@ public class Node {
     }
 
     else if (kind.equals("var")) {
-      MemTable table = tables.get(tables.size()-1);
-      return table.retrieve(info);
+      MemTable table = tables.pop();
+      double value = table.retrieve(info);
+      tables.push(table);
+      return value;
     }
 
     else if (kind.equals("+") || kind.equals("-")) {
@@ -449,7 +424,6 @@ public class Node {
       error("Unknown node kind [" + kind + "], info [" + info + "] evaluate" );
       return 0;
     }
-
   }// evaluate
 
 }// Node
