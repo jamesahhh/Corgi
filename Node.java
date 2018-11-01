@@ -283,8 +283,8 @@ public class Node {
       else {
         a = Double.parseDouble(first.info);
       }
-      if(first.kind.equals("var")){
-        b = first.evaluate();
+      if(second.kind.equals("var")){
+        b = second.evaluate();
       }
       else {
         b = Double.parseDouble(second.info);
@@ -303,8 +303,8 @@ public class Node {
       else {
         a = Double.parseDouble(first.info);
       }
-      if(first.kind.equals("var")){
-        b = first.evaluate();
+      if(second.kind.equals("var")){
+        b = second.evaluate();
       }
       else {
         b = Double.parseDouble(second.info);
@@ -323,8 +323,8 @@ public class Node {
       else {
         a = Double.parseDouble(first.info);
       }
-      if(first.kind.equals("var")){
-        b = first.evaluate();
+      if(second.kind.equals("var")){
+        b = second.evaluate();
       }
       else {
         b = Double.parseDouble(second.info);
@@ -343,8 +343,8 @@ public class Node {
       else {
         a = Double.parseDouble(first.info);
       }
-      if(first.kind.equals("var")){
-        b = first.evaluate();
+      if(second.kind.equals("var")){
+        b = second.evaluate();
       }
       else {
         b = Double.parseDouble(second.info);
@@ -363,8 +363,8 @@ public class Node {
       else {
         a = Double.parseDouble(first.info);
       }
-      if(first.kind.equals("var")){
-        b = first.evaluate();
+      if(second.kind.equals("var")){
+        b = second.evaluate();
       }
       else {
         b = Double.parseDouble(second.info);
@@ -383,8 +383,8 @@ public class Node {
       else {
         a = Double.parseDouble(first.info);
       }
-      if(first.kind.equals("var")){
-        b = first.evaluate();
+      if(second.kind.equals("var")){
+        b = second.evaluate();
       }
       else {
         b = Double.parseDouble(second.info);
