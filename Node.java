@@ -11,11 +11,11 @@ import java.awt.*;
 public class Node {
 
   public static int count = 0; // maintain unique id for each node
-  private static double rv; // to store return value of evaluate for if-else
+  private static double rv; // to store return value
   private int id;
 
-  private static Node funcRoot, paramNode, argNode;
-  private boolean returnBool; //true if return statement has been executed
+  private static Node funcRoot, paramNode, argNode; // pointer nodes for function calls, and parameter passing
+  private static boolean returnBool; //true if return statement has been executed
 
   private String kind; // non-terminal or terminal category for the node
   private String info; // extra information about the node such as
@@ -172,7 +172,7 @@ public class Node {
       if (first != null)
         first.evaluate();
       else
-        error("Program does have an initial function call");
+        error("Program does not have an initial function call");
     }
 
     else if (kind.equals("funcDef")) {
@@ -180,9 +180,13 @@ public class Node {
         paramNode = first;
         while(argNode != null && paramNode != null){
           table.store(paramNode.info, argNode.first.evaluate());
-          paramNode = paramNode.first;
-          argNode = argNode.second;
+          if(paramNode != null)
+            paramNode = paramNode.first;
+          if(argNode != null)
+            argNode = argNode.second;
         }
+        if(argNode != null || paramNode != null)
+          error("The number of arguments passed to function [" + info + "] does not match the number of parameters");
         tables.push(table);
         if(second != null)
             second.execute();
@@ -257,8 +261,8 @@ public class Node {
       argNode = first;
       Node node = funcRoot;
       while (!found && !eof) {
-        //System.out.println("Looking for function " + info);
-        //System.out.println("Looking at function " + node.first.info);
+        //System.out.println("Looking for function [" + info + "]");
+        //System.out.println("Looking at function [" + node.first.info + "]");
         if (info.equals(node.first.info)) {
           found = true;
           node.first.execute();
@@ -269,7 +273,7 @@ public class Node {
           }
           else {
             eof = true;
-            error("Function " + info + " was not found.");
+            error("Function [" + info + "] was not found.");
           }
         }
       }
@@ -279,19 +283,8 @@ public class Node {
     }
 
     else if (kind.equals("lt")) {
-      double a, b;
-      if(first.kind.equals("var")){
-        a = first.evaluate();
-      }
-      else {
-        a = Double.parseDouble(first.info);
-      }
-      if(second.kind.equals("var")){
-        b = second.evaluate();
-      }
-      else {
-        b = Double.parseDouble(second.info);
-      }
+      double a = first.evaluate();
+      double b = second.evaluate();
       if (a < b) {
         return 1;
       } else {
@@ -299,39 +292,17 @@ public class Node {
       }
     } 
     else if (kind.equals("le")) {
-      double a, b;
-      if(first.kind.equals("var")){
-        a = first.evaluate();
-      }
-      else {
-        a = Double.parseDouble(first.info);
-      }
-      if(second.kind.equals("var")){
-        b = second.evaluate();
-      }
-      else {
-        b = Double.parseDouble(second.info);
-      }
-      if (a < b || a == b) {
+      double a = first.evaluate();
+      double b = second.evaluate();
+      if (a <= b) {
         return 1;
       } else {
         return 0;
       }
     } 
     else if (kind.equals("eq")) {
-      double a, b;
-      if(first.kind.equals("var")){
-        a = first.evaluate();
-      }
-      else {
-        a = Double.parseDouble(first.info);
-      }
-      if(second.kind.equals("var")){
-        b = second.evaluate();
-      }
-      else {
-        b = Double.parseDouble(second.info);
-      }
+      double a = first.evaluate();
+      double b = second.evaluate();
       if (a == b) {
         return 1;
       } else {
@@ -339,19 +310,8 @@ public class Node {
       }
     } 
     else if (kind.equals("ne")) {
-      double a, b;
-      if(first.kind.equals("var")){
-        a = first.evaluate();
-      }
-      else {
-        a = Double.parseDouble(first.info);
-      }
-      if(second.kind.equals("var")){
-        b = second.evaluate();
-      }
-      else {
-        b = Double.parseDouble(second.info);
-      }
+      double a = first.evaluate();
+      double b = second.evaluate();
       if (a != b) {
         return 1;
       } else {
@@ -359,19 +319,8 @@ public class Node {
       }
     } 
     else if (kind.equals("or")) {
-      double a, b;
-      if(first.kind.equals("var")){
-        a = first.evaluate();
-      }
-      else {
-        a = Double.parseDouble(first.info);
-      }
-      if(second.kind.equals("var")){
-        b = second.evaluate();
-      }
-      else {
-        b = Double.parseDouble(second.info);
-      }
+      double a = first.evaluate();
+      double b = second.evaluate();
       if (a != 0 || b != 0) {
         return 1;
       } else {
@@ -379,19 +328,8 @@ public class Node {
       }
     } 
     else if (kind.equals("and")) {
-      double a, b;
-      if(first.kind.equals("var")){
-        a = first.evaluate();
-      }
-      else {
-        a = Double.parseDouble(first.info);
-      }
-      if(first.kind.equals("var")){
-        b = first.evaluate();
-      }
-      else {
-        b = Double.parseDouble(second.info);
-      }
+      double a = first.evaluate();
+      double b = second.evaluate();
       if (a != 0 && b != 0) {
         return 1;
       } else {
@@ -399,13 +337,7 @@ public class Node {
       }
     } 
     else if (kind.equals("not")) {
-      double a;
-      if(first.kind.equals("var")){
-        a = first.evaluate();
-      }
-      else {
-        a = Double.parseDouble(first.info);
-      }
+      double a = first.evaluate();
       if (a == 0) {
         return 1;
       } else {
@@ -472,7 +404,7 @@ public class Node {
 
     else if (kind.equals("opp")) {
       double value = first.evaluate();
-      return -value;
+      return (-value);
     }
 
     else if (kind.equals("round")) {

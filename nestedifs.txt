@@ -49,6 +49,5 @@ def categorize(x)
         end
      end
   end
-
 return 0
 end

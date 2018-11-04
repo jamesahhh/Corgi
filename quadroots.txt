@@ -1,5 +1,5 @@
 main()
-
+/*Calculates qudratic roots*/
 def main()
 
    "enter a:"
@@ -18,7 +18,7 @@ def main()
    x2 = (-b + sqrt(disc) ) / (2*a)
 
    "x1: "    print(x1) nl()
-   "x2: "    print(x2 ) nl()
+   "x2: "    print(x2) nl()
 
 
    return 0

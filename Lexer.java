@@ -76,6 +76,7 @@ public class Lexer {
                   done = true;
                }
                else if ( sym == '/'){
+                   data += (char) sym;
                    state = 10;
                }
                else if ( sym == '"'){
@@ -157,7 +158,7 @@ public class Lexer {
                 data = "";
               }
               else {
-                data += (char) sym;
+                putBackSymbol( sym );
                 state = 8;
                 done = true;
               }
