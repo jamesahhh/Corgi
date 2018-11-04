@@ -202,18 +202,18 @@ public class Parser {
             else{
                lex.putBackToken(token);
                Node third = parseStatements();
-               token = lex.getNextToken();
-               errorCheck( token, "var", "end");
                return  new Node("if", first, null, third);
             }
          }
          else{
             lex.putBackToken(token);
             Node second = parseStatements();
+            token = lex.getNextToken();
             if(token.getDetails().equals("end")){
                return  new Node("if", first, second, null);
             }
             else{
+               lex.putBackToken(token);
                Node third = parseStatements();
                return  new Node("if", first, second, third);
             }
@@ -239,6 +239,7 @@ public class Parser {
             return null;
          }
       }
+      
       else {
          System.out.println("Can't have statement starting with " + token );
          System.exit(1);

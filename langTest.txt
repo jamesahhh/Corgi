@@ -1,0 +1,177 @@
+main()
+
+def main()
+	"----------------------------------->"
+	"Testing comments: "
+	/*This comment is part of the test. Including this part -> "Fail" nl()*/
+	"Pass" nl()
+	
+	"----------------------------------->"
+	"Testing if else branching: "
+	if(0)
+		ifel1 = 0
+	else
+		ifel1 = 1
+	end
+	
+	if(1)
+		ifel2 = 1
+	else
+		ifel2 = 0
+	end
+	
+	ifel3 = 1
+	if(1)
+	else
+		ifel3 = 0
+	end
+	
+	ifel4 = 1
+	if(0)
+		ifel4 = 0
+	else
+	end
+
+	if(1)
+	else
+	end
+	
+	if(and(and(ifel1,ifel2),and(ifel3,ifel4)))
+		"Pass" nl()
+	else
+		"Fail" nl()
+	end
+	
+	"----------------------------------->"
+	"Testing built in funcitons: "
+	b1 = lt(2,3)
+	b2 = not(lt(3,2)) /*!*/
+	b3 = not(lt(3,3)) /*!*/
+	c1 = and(and(b1,b2),b3)
+	b4 = le(2,3)
+	b5 = not(le(3,2)) /*!*/
+	b6 = le(3,3)
+	c2 = and(and(b4,b5),b6)
+	b7 = eq(2,2)
+	b8 = not(eq(3,2)) /*!*/
+	c3 = and(b7,b8)
+	b9 = not(ne(2,2)) /*!*/
+	b10 = ne(3,2)
+	c4 = and(b9,b10)
+	b11 = not(and(0,3))
+	b12 = not(and(0,0))
+	b13 = and(3,3)
+	c5 = and(and(b11,b12),b13)
+	b14 = or(0,3)
+	b15 = not(or(0,0))
+	b16 = or(3,3)
+	c6 = and(and(b14,b15),b16)
+	b17 = not(0)
+	b18 = not(not(3))
+	c7 = and(b17,b18)
+	b19 = eq(3,sqrt(9))
+	b20 = eq(2,pow(4,.5))
+	c8 = and(b19,b20)
+	b21 = eq(3,round(2.5))
+	b22 = eq(round(2.49999),trunc(2.49999))
+	c9 = and(b21,b22)
+	fc = and(and(and(and(c1,c2),and(c3,c4)), and(and(c5,c6),and(c7,c8))),c9)
+	if(fc)
+		"Pass" nl()
+	else
+		"Fail" nl()
+	end	
+
+	"----------------------------------->"
+	"Testing function calling: "
+	/*As a factor*/
+	fc = functionTest1()
+	/*As a statement*/
+	functionTest2(fc)
+	
+	"----------------------------------->"
+	"Testing parameter passing and value returning: "
+	if(eq(paramPassingAndReturning1(1), 1))
+		pt1 = 1
+	else
+		pt1 = 0
+	end
+	if(not(paramPassingAndReturning1(1-1)))
+		pt2 = 1
+	else
+		pt2 = 0
+	end
+	if(not(paramPassingAndReturning2(1,1)))
+		pt3 = 1
+	else
+		pt3 = 0
+	end
+	if(and(and(pt1,pt2),pt3))
+		"Pass" nl()
+	else
+		"Fail" nl()
+	end
+	
+	"----------------------------------->"
+	"Testing function locality: "
+	x = 1
+	y = localityTest(x)
+	if(and(x,not(y)))
+		"Pass" nl()
+	else
+		"Fail" nl()
+	end
+
+	"----------------------------------->"
+	"Would you like me to try and cause an error? (1)Yes (0)No "
+	ans = input() nl()
+	if(ans)
+		breakIt()
+	else
+		"Goodbye!" nl()
+	end
+end
+
+def functionTest1()
+	return 1
+end
+
+def functionTest2(x)
+	if(x)
+		"Pass" nl()
+	else
+		"Fail" nl()
+	end
+end
+
+def paramPassingAndReturning1(x)
+	return x
+	return not(x)
+end
+
+def paramPassingAndReturning2(x,y)
+	return x-y
+	return not(x-y)
+end
+
+def localityTest(x)
+	x = x - 1
+	return x
+end
+
+def breakIt()
+	"Passing too many parameters: " 
+	tooMany(x,y,z)
+	"Passing too few parameters: " 
+	tooFew()
+	"Calling a function that does not exist: " 
+	return 0
+end
+
+def tooMany(a)
+	return 0
+end
+
+def tooFew(a,b,c)
+	return 0
+end
